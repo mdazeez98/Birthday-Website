@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday My Love</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #a810ee;
+      color: #444;
+    }
+
+    header {
+      background: url('https://source.unsplash.com/1600x900/?love,romantic') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 48px;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #d63384;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: #f8f9fa;
+      padding: 20px;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    max-width: 1000px;
+    margin: auto;
+    }
+
+   .gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.gallery img:hover {
+  transform: scale(1.1) rotateZ(0.5deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+ .timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 0;
+}
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background-color: #d63384;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  padding: 20px 30px;
+  position: relative;
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.timeline-item img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  transform-origin: center center;
+}
+
+.timeline-item img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+
+.timeline-item .caption {
+  margin-top: 10px;
+  background: #fff0f5;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #d63384;
+}
+
+.timeline-item.left {
+  left: 0;
+  text-align: right;
+}
+
+.timeline-item.right {
+  left: 50%;
+  text-align: left;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  width: 20px;
+  height: 20px;
+  background-color: #d63384;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.timeline-item.left::before {
+  right: -10px;
+}
+
+.timeline-item.right::before {
+  left: -10px;
+}
+
+
+
+
+/* Animation keyframes */
+@keyframes fadeInLeft {
+  0% { opacity: 0; transform: translateX(-50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  0% { opacity: 0; transform: translateX(50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Apply animation only when in view */
+.timeline-item {
+  opacity: 0;
+  transition: opacity 0.6s ease-out;
+}
+
+.timeline-item.visible.left {
+  animation: fadeInLeft 1s ease forwards;
+}
+
+.timeline-item.visible.right {
+  animation: fadeInRight 1s ease forwards;
+}
+
+
+
+.heart-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  transform: rotate(45deg);
+  animation: floatHeart 15s linear infinite; /* slowed from 8s to 15s */
+  opacity: 0.7;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: pink;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -10px;
+  left: 0;
+}
+
+.heart::after {
+  left: -10px;
+  top: 0;
+}
+
+@keyframes floatHeart {
+  0% {
+    bottom: -20px;
+    transform: translateX(0) rotate(45deg);
+    opacity: 0;
+  }
+  30% {
+    transform: translateX(10px) rotate(45deg);
+    opacity: 0.5;
+  }
+  60% {
+    transform: translateX(-10px) rotate(45deg);
+    opacity: 0.8;
+  }
+  100% {
+    bottom: 100%;
+    transform: translateX(-30px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+
+
+#letter-text {
+  background: #fffafc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-family: 'Pacifico', cursive;
+  color: #d63384;
+}
+
+
+
+/* Responsive Mobile Styles */
+@media (max-width: 768px) {
+  header {
+    height: 60vh;
+    padding: 20px;
+  }
+
+  header h1 {
+    font-size: 32px;
+  }
+
+  header p {
+    font-size: 18px;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 0 10px;
+  }
+
+  section {
+    padding: 40px 10px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .timeline {
+    padding: 20px 10px;
+  }
+
+  /* Timeline items stack vertically and full width */
+  .timeline-item {
+    width: 100% !important;
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+    margin-bottom: 30px;
+  }
+
+  /* Remove left/right alignment, center items */
+  .timeline-item.left,
+  .timeline-item.right {
+    left: 0 !important;
+    text-align: center !important;
+  }
+
+  /* Adjust timeline line position */
+  .timeline::after {
+    left: 20px;
+  }
+
+  /* Position timeline dots on left */
+  .timeline-item::before {
+    left: 0 !important;
+    right: auto !important;
+    top: 15px;
+  }
+
+  /* Make videos full width */
+  video {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Quiz screen inputs full width */
+  #quiz-screen input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+#cake-img {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+
+
+  </style>
+</head>
+<body>
+
+
+
+<audio id="birthday-audio" preload="auto">
+  <source src="music/happy_birthday_message.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+
+<div id="countdown-screen" style="
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url('images/bg.jpg') no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: rgb(154, 13, 189);
+  text-shadow: 2px 2px 10px #000;
+">
+  <h1 style="font-size: 40px; font-family: 'Pacifico', cursive;">🎂 Happy Birthday Saathu Kutti 🎉</h1>
+  <div id="countdown" style="font-size: 30px; margin-top: 20px; font-weight: bold;"></div>
+</div>
+
+<!-- Quiz Screen -->
+<div id="quiz-screen" style="
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+">
+  <h2 style="color:#d63384; font-family: 'Pacifico', cursive;">Before we begin...</h2>
+  <p>Please answer these questions:</p>
+  
+  <form id="quiz-form" style="max-width: 400px; margin: auto;">
+    <label style="font-weight: bold; display: block; margin: 10px 0 5px;">
+      1. What’s our anniversary date? (DD-MM-YYYY)
+    </label>
+    <input type="text" id="q1" required style="width: 100%; padding: 8px; font-size: 16px;" placeholder="e.g. 09-09-2024" />
+
+    <label style="font-weight: bold; display: block; margin: 20px 0 5px;">
+      2. What is your favorite color? 🌸
+    </label>
+    <input type="text" id="q2" required style="width: 100%; padding: 8px; font-size: 16px;" placeholder="e.g. Rose" />
+
+    <button type="submit" style="margin-top: 20px; padding: 10px 20px; background: #d63384; color: white; border: none; font-size: 18px; cursor: pointer; border-radius: 8px;">
+      Submit Answers
+    </button>
+
+    <p id="quiz-error" style="color: red; margin-top: 10px; display: none;"></p>
+  </form>
+</div>
+
+
+
+<!-- Happy Birthday Animation Container (initially hidden) -->
+<div id="birthday-animation" style="display:none; text-align:center; padding: 50px; color: #ff1493; font-family: 'Pacifico', cursive; position: relative; z-index: 10000;">
+  <h1 id="happy-birthday-text" style="font-size: 60px; opacity: 0;">🎉 Happy Birthday! Kuku Pa 🎉</h1>
+  <img id="cake-img" src="images/cake.jpg" alt="Birthday Cake" style="
+  width: 600px;
+  margin-top: 30px;
+  opacity: 0;
+  transition: opacity 5s ease;
+">
+
+  <canvas id="confetti-canvas" style="position: fixed; top:0; left:0; width: 100%; height: 100%; pointer-events:none;"></canvas>
+</div>
+
+
+
+<div id="main-site" style="opacity: 0; transition: opacity 2s;">
+  <!-- keep your current website code inside this div -->
+
+
+  <!-- Hero Section -->
+  <header>
+    <h1>Happy Birthday, My Love 💖</h1>
+    <p>Here's to us and all our beautiful memories...</p>
+  </header>
+
+  <!-- Photos Section -->
+  <section id="photos">
+    <h2>📸 Our Memories</h2>
+    <div class="gallery">
+        <img src="images/1.jpg" alt="Memory 1">
+        <img src="images/2.jpg" alt="Memory 2">
+        <img src="images/3.jpg" alt="Memory 3">
+        <img src="images/4.jpg" alt="Memory 4">
+        <img src="images/5.jpg" alt="Memory 5">
+    </div>
+  </section>
+
+  <!-- Videos Section -->
+  <section id="videos">
+    <h2>🎥 Video Moments</h2>
+    
+    <video controls width="80%">
+    <source src="videos/video1.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+    <br><br>
+    <video controls width="80%">
+    <source src="videos/video2.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+
+  </section>
+
+  <!-- Timeline Section -->
+<section id="journey">
+
+<div class="heart-particles">
+  <span class="heart" style="left: 10%; animation-delay: 0s;"></span>
+  <span class="heart" style="left: 20%; animation-delay: 2s;"></span>
+  <span class="heart" style="left: 30%; animation-delay: 4s;"></span>
+  <span class="heart" style="left: 40%; animation-delay: 1s;"></span>
+  <span class="heart" style="left: 50%; animation-delay: 3s;"></span>
+  <span class="heart" style="left: 60%; animation-delay: 5s;"></span>
+  <span class="heart" style="left: 70%; animation-delay: 2.5s;"></span>
+  <span class="heart" style="left: 80%; animation-delay: 1.5s;"></span>
+  <span class="heart" style="left: 90%; animation-delay: 3.5s;"></span>
+  <span class="heart" style="left: 25%; animation-delay: 6s;"></span>
+</div>  
+
+
+  <h2>📅 Our Journey Together</h2>
+  <div class="timeline">
+    <div class="timeline-item left">
+      <img src="images/timeline1.jpg" alt="Memory 1">
+      <div class="caption">🌟 The day we met – 9th Sept 2024</div>
+    </div>
+    <div class="timeline-item right">
+      <img src="images/timeline2.jpg" alt="Memory 2">
+      <div class="caption">💍 Our engagement – 8th Feb 2025</div>
+    </div>
+    <div class="timeline-item left">
+      <img src="images/timeline3.jpg" alt="Memory 3">
+      <div class="caption">🎉 Wedding day – 9th Feb 2025</div>
+    </div>
+    <div class="timeline-item right">
+      <img src="images/timeline4.jpg" alt="Memory 4">
+      <div class="caption">✈️ First trip together – 20th Feb 2025</div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Message Section -->
+  <section id="message">
+    <h2>💌 A Message from Me</h2>
+    <p>(You can write a love letter or surprise message here!)</p>
+  </section>
+
+<section id="love-letter">
+    <h2>💖 My Love Letter to You</h2>
+    <div id="letter-text" style="max-width: 700px; margin: auto; font-size: 20px; line-height: 1.6; white-space: pre-wrap;"></div>
+</section>
+
+
+  <!-- Footer -->
+  <footer>
+    Made with ❤️ by Mohamed Azeez | Surprise for 4 August
+  </footer>
+
+
+</div> <!-- end of main-site -->
+
+
+
+<script>
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  const lastItem = timelineItems[timelineItems.length - 1];
+  let burstTriggered = false;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+
+        // 🎊 Trigger confetti burst when last item appears
+        if (entry.target === lastItem && !burstTriggered) {
+          burstTriggered = true;
+
+          // 🎉 Confetti burst
+          confetti({
+            particleCount: 100,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#ff69b4', '#ff1493', '#ffd1dc', '#ff85a2']
+          });
+
+          // 💕 Bonus: Floating hearts burst
+          for (let i = 0; i < 10; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = (Math.random() * 3) + 's';
+            document.querySelector('.heart-particles').appendChild(heart);
+          }
+        }
+
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  timelineItems.forEach(item => {
+    observer.observe(item);
+  });
+</script>
+
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    observer.observe(item);
+  });
+</script>
+
+
+<script>
+  const letter = `My dearest Saathu Kutti 💕,
+
+Every moment with you has been nothing short of magical. From our first meeting to all our adventures, you've filled my life with love, joy, and laughter.
+
+Your smile brightens even my darkest days, and your presence gives me strength like nothing else ever could.
+
+On your birthday, I just want you to know that I thank the universe every single day for bringing you into my life.
+
+You are not just my wife, you are my best friend, my dream, and my forever.
+
+With all my heart,
+Mohamed Azeez ❤️`;
+
+  let i = 0;
+  function typeLetter() {
+    if (i < letter.length) {
+      document.getElementById("letter-text").textContent += letter.charAt(i);
+      i++;
+      setTimeout(typeLetter, 50); // adjust speed here
+    }
+  }
+
+  // Start typing when the section comes into view
+  const letterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        typeLetter();
+        letterObserver.disconnect(); // stop observing after animation
+      }
+    });
+  }, { threshold: 0.3 });
+
+  letterObserver.observe(document.getElementById("love-letter"));
+</script>
+
+
+
+<script>
+
+function showBirthdayAnimation() {
+  const animDiv = document.getElementById('birthday-animation');
+  const text = document.getElementById('happy-birthday-text');
+  const cake = document.getElementById('cake-img');
+
+  animDiv.style.display = 'block';
+
+  // Fade in text
+  text.style.transition = 'opacity 2s ease-in';
+  text.style.opacity = 1;
+
+  // Fade in cake GIF after 1 second
+  setTimeout(() => {
+    cake.style.opacity = 1;
+  }, 1000);
+
+  // Confetti burst
+  confetti({
+    particleCount: 200,
+    spread: 100,
+    origin: { y: 0.6 },
+    colors: ['#ff1493', '#ff69b4', '#ffd1dc', '#ff85a2']
+  });
+
+  // Reveal the site after animation
+  setTimeout(() => {
+    document.getElementById('main-site').style.opacity = 1;
+    animDiv.style.display = 'none';
+  }, 7000);
+}
+
+
+</script>
+
+
+
+
+
+
+<script>
+ 
+ const birthday = new Date("2025-07-03T00:00:00+10:00").getTime();
+
+const timer = setInterval(function () {
+  const now = new Date().getTime();
+  const distance = birthday - now;
+
+  if (distance <= 0) {
+    clearInterval(timer);
+
+    // Hide countdown screen
+    document.getElementById("countdown-screen").style.display = "none";
+
+    // Show quiz screen
+    document.getElementById("quiz-screen").style.display = "flex";
+
+    // Quiz logic
+    const quizForm = document.getElementById("quiz-form");
+    const errorMsg = document.getElementById("quiz-error");
+
+    quizForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const ans1 = document.getElementById("q1").value.trim();
+      const ans2 = document.getElementById("q2").value.trim().toLowerCase();
+
+      const correct1 = ans1 === "09-02-2025"; // Adjust your anniversary date
+      const correct2 = ans2 === "purple";       // Adjust favorite flower or other answer
+
+      if (correct1 && correct2) {
+        // Hide quiz, reveal main site
+        document.getElementById("quiz-screen").style.display = "none";
+        showBirthdayAnimation();
+        //document.getElementById("main-site").style.opacity = 1;
+      } else {
+        errorMsg.textContent = "Oops! One or both answers are incorrect. Please try again.";
+        errorMsg.style.display = "block";
+      }
+    });
+
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}, 1000);
+
+</script>
+
+
+
+
+</body>
+</html>
