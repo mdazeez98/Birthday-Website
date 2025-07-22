@@ -690,26 +690,39 @@ const timer = setInterval(function () {
     const errorMsg = document.getElementById("quiz-error");
 
     quizForm.addEventListener("submit", function(event) {
-      event.preventDefault();
+  event.preventDefault();
 
-      const ans1 = document.getElementById("q1").value.trim();
-      const ans2 = document.getElementById("q2").value.trim().toLowerCase();
-      const ans3 = document.getElementById("q3").value.trim();
+  const ans1 = document.getElementById("q1").value.trim();
+  const ans2 = document.getElementById("q2").value.trim().toLowerCase();
+  const ans3 = document.getElementById("q3").value.trim();
 
-      const correct1 = ans1 === "09-02-2025"; // Adjust your anniversary date
-      const correct2 = ans2 === "purple";       // Adjust favorite flower or other answer
-      const correct3 = ans3 === "4357";
+  const encodedAnswers = {
+    q1: "MDktMDItMjAyNQ==",  // 09-02-2025
+    q2: "cHVycGxl",          // purple
+    q3: "NDM1Nw=="           // 4357
+  };
 
-      if (correct1 && correct2 && correct3) {
-        // Hide quiz, reveal main site
-        document.getElementById("quiz-screen").style.display = "none";
-        showBirthdayAnimation();
-        //document.getElementById("main-site").style.opacity = 1;
-      } else {
-        errorMsg.textContent = "Oops! One or both answers are incorrect. Please try again.";
-        errorMsg.style.display = "block";
-      }
-    });
+  function decode(b64) {
+    try {
+      return atob(b64).trim().toLowerCase(); // Lowercase for comparison
+    } catch (e) {
+      return "";
+    }
+  }
+
+  const correct1 = ans1.trim().toLowerCase() === decode(encodedAnswers.q1);
+  const correct2 = ans2 === decode(encodedAnswers.q2);
+  const correct3 = ans3.trim() === decode(encodedAnswers.q3);
+
+  if (correct1 && correct2 && correct3) {
+    document.getElementById("quiz-screen").style.display = "none";
+    showBirthdayAnimation();
+  } else {
+    errorMsg.textContent = "Oops! One or more answers are incorrect. Please try again.";
+    errorMsg.style.display = "block";
+  }
+});
+
 
     return;
   }

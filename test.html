@@ -125,6 +125,30 @@ window.addEventListener("load", function () {
 
 
 
+
+
+
+
+quizForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const ans1 = document.getElementById("q1").value.trim();
+      const ans2 = document.getElementById("q2").value.trim().toLowerCase();
+      const ans3 = document.getElementById("q3").value.trim();
+
+      const correct1 = ans1 === "09-02-2025"; // Adjust your anniversary date
+      const correct2 = ans2 === "purple";       // Adjust favorite flower or other answer
+      const correct3 = ans3 === "4357";
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
