@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Love Story Timeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      transition: background 0.5s ease; /* Smooth transition for background */
+      scroll-behavior: smooth; /* Enable smooth scrolling */
+    }
+
+    h1 {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #b95c50;
+      font-size: 3rem;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    .timeline {
+      width: 90%;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .event {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transition for hover effects */
+      position: relative;
+    }
+
+    .event:hover {
+      transform: scale(1.05); /* Slightly enlarge the event box */
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+      background-color: rgba(255, 255, 255, 1); /* Change background color on hover */
+    }
+
+    .date {
+      font-weight: bold;
+      color: #b95c50;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .description {
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    /* Enhanced Seasonal Themes with Violet and Purple Tints */
+    .spring {
+      background: linear-gradient(to bottom, #e1bee7, #9c27b0); /* Light violet to vibrant purple */
+    }
+
+    .summer {
+      background: linear-gradient(to bottom, #d1c4e9, #673ab7); /* Light purple to deep purple */
+    }
+
+    .autumn {
+      background: linear-gradient(to bottom, #e0e0e0, #7e57c2); /* Grey to vibrant purple */
+    }
+
+    .winter {
+      background: linear-gradient(to bottom, #d1c4e9, #4a148c); /* Light purple to dark purple */
+    }
+
+    /* Handwritten Note Styles */
+    .love-note {
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: #b95c50;
+      margin: 2rem 0;
+      opacity: 0; /* Start hidden */
+      animation: fadeIn 2s forwards; /* Fade in animation */
+      animation-delay: 1s; /* Delay before animation starts */
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px); /* Start slightly lower */
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0); /* End at original position */
+      }
+    }
+
+
+
+
+
+
+
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.floating-heart {
+  position: fixed;
+  bottom: -20px;
+  left: 0;
+  font-size: 1.5rem; /* slightly larger */
+  color: rgba(255, 105, 135, 0.5); /* more visible pink */
+  animation: floatHeart linear infinite;
+  pointer-events: none;
+  z-index: 1;
+  transform: rotate(0deg);
+  opacity: 0.8;
+}
+
+
+
+.love-note-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.love-note {
+  background: #fff8f0;
+  border: 1px solid #e0c9a6;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.9rem; /* slightly reduced for long text */
+  color: #8b3e2a;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  width: 700px;
+  line-height: 1.6;
+  text-align: left;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  animation: fadeIn 2s forwards, paperFloat 6s ease-in-out infinite;
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes paperFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(-0.5deg); }
+}
+
+
+
+
+
+.typed-text {
+  display: inline-block;
+  white-space: normal; /* allow line wrapping */
+  overflow: hidden;
+  animation: typing 10s steps(180, end), blinkCursor 0.7s step-end infinite;
+  border-right: 2px solid #8b3e2a;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blinkCursor {
+  from, to { border-color: transparent }
+  50% { border-color: #8b3e2a }
+}
+
+
+
+#typed-text::after {
+  content: '|';
+  animation: blink 0.7s infinite;
+  color: #8b3e2a;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+
+
+ .back-home-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Change to right: 20px if you want it on the right side */
+    background-color: #e75480;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-family: 'Arial', sans-serif;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .back-home-btn:hover {
+    background-color: #d43d6f;
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 600px) {
+    .back-home-btn {
+      font-size: 1rem;
+      padding: 10px 18px;
+    }
+  }
+
+
+  </style>
+</head>
+
+<body>
+  <h1>Our Beautiful Journey 💕</h1>
+  <div class="timeline">
+    <!-- Timeline events will be inserted here -->
+  </div>
+
+<a href="index.html" class="back-home-btn">⬅️ Home</a>
+
+<div class="love-note-wrapper">
+  <div class="love-note">
+    <span id="typed-text" data-text="
+Thank you for being everything to me from the moment I first heard about you. 💖
+
+While making this timeline, I went through all our memories — every chat, every smile, every tear — from the very beginning until now. I relived our journey with a full heart, and I know there are a few things I must say...
+
+1. I should have stood by your side when you needed me most, especially during our days at my home. I regret that deeply. 💔
+
+2. I promise to make you my top priority — always. ❤️
+
+3. Many of our fights came from the pressure of work, money, and people around us. But my love, none of them are more important than us. 🤝
+
+4. As for the relatives — I vow to protect you from every hurtful word. I’ll always be your shield, your strength. 🛡️
+
+5. About work — the environment I’m in is toxic. The time difference makes things harder — when your day begins, I’m deep in the night. I long for our time together, that’s why I beg for our 9 to 5. ⏰❤️
+
+6. Regarding money — we’re just starting out, my love. But trust me, we’ll rise together. We'll build a beautiful life, filled with dreams fulfilled and laughter shared. 💸💫
+
+No matter what we go through, no matter where life takes us — we will hold hands, and walk together until the very end... until death parts us. 🕊️
+
+I love you endlessly, my dear Saathu Kutti.
+
+Happy Birthday, my life. 🎂💞
+    "></span>
+  </div>
+</div>
+
+
+
+
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: false, // repeat animations on scroll
+    });
+
+    const events = [
+      { id: "event1", date: "27-06-2024", description: "1st photo of my love from my mom 📸" },
+      { id: "event2", date: "30-06-2024", description: "Said ok to my mom 👍" },
+      { id: "event3", date: "02-07-2024", description: "Sent my photo 📷" },
+      { id: "event4", date: "22-07-2024", description: "Got request on LinkedIn 💌" },
+      { id: "event5", date: "25-07-2024", description: "Where it all started: 'Hi Asalamualikum…' 💬" },
+      { id: "event6", date: "26-07-2024", description: "1st Shock: 'I am vegetarian' 😲" },
+      { id: "event7", date: "27-07-2024", description: "You sent your photo for the first time – even during Work Soliton 🖼️" },
+      { id: "event8", date: "28-07-2024", description: "Blocked you 😅" },
+      { id: "event9", date: "03-08-2024", description: "My Kuku pa's Birthday 🎉" },
+      { id: "event10", date: "07-08-2024", description: "First Rave 🕺" },
+      { id: "event11", date: "09-08-2024", description: "Booked ticket to see my Chella Kutti ✈️" },
+      { id: "event12", date: "10-08-2024", description: "First time hearing your voice (cat video 🐱🎥) 🎤" },
+      { id: "event13", date: "11-08-2024", description: "First call 📞" },
+      { id: "event14", date: "15-08-2024", description: "First fight 😢" },
+      { id: "event15", date: "22-08-2024", description: "Got my life back: 'Hey I can't' 🙁" },
+      { id: "event16", date: "25-08-2024", description: "First time you showed your cherry red lips 💋" },
+      { id: "event17", date: "29-08-2024", description: "Proposal (Mechiee style 💍)" },
+      { id: "event18", date: "01-09-2024", description: "First gifts for Kuku pa 💝" },
+      { id: "event19", date: "07-09-2024", description: "Flight to meet Kuku pa ✈️" },
+      { id: "event20", date: "08-09-2024", description: "Long wait to meet my love ⏳" },
+      { id: "event21", date: "09-09-2024", description: "First time seeing you ❤️" },
+      { id: "event22", date: "10-09-2024", description: "First kiss in the garden 💏" },
+      { id: "event23", date: "11-09-2024", description: "First movie together 🎬 (not just movie 😉)" },
+      { id: "event24", date: "12-09-2024", description: "Waiting for the sneak out 😎" },
+      { id: "event25", date: "13-09-2024", description: "First sneak out adventure 🏃‍♂️💨" },
+      { id: "event26", date: "14-09-2024", description: "Got caught 😳" },
+      { id: "event27", date: "15-09-2024", description: "Farewell before I flew to Sydney again 😭" },
+      { id: "event28", date: "16-09-2024", description: "Surprise Instagram video 🎥❤️" },
+      { id: "event29", date: "20-09-2024", description: "Finalized our wedding date 📆" },
+      { id: "event30", date: "21-09-2024", description: "Marriage hall booked 🕌" },
+      { id: "event31", date: "24-09-2024", description: "First time cooked veg 🥕" },
+      { id: "event32", date: "29-09-2024", description: "First time cooked paneer 🧀" },
+      { id: "event33", date: "01-10-2024", description: "First time cooked broccoli 🥦" },
+      { id: "event34", date: "07-10-2024", description: "First accident (because of a fight) 🚗💔" },
+      { id: "event35", date: "10-10-2024", description: "Dental work due to me 🦷💔" },
+      { id: "event36", date: "11-10-2024", description: "Invitation finalized 💌" },
+      { id: "event37", date: "12-10-2024", description: "Reception dress selected 👗" },
+      { id: "event38", date: "16-10-2024", description: "Booked wedding tickets 🎫" },
+      { id: "event39", date: "26-10-2024", description: "Wedding dress picked 👰" },
+      { id: "event40", date: "28-10-2024", description: "Invite draft finalized 📝" },
+      { id: "event41", date: "01-11-2024", description: "Invites printed 🖨️" },
+      { id: "event42", date: "20-11-2024", description: "First invite given to mosque 🕌" },
+      { id: "event43", date: "30-11-2024", description: "Kuku pa's graduation 🎓" },
+      { id: "event44", date: "14-12-2024", description: "E-invite finalized 💻" },
+      { id: "event45", date: "16-12-2024", description: "Wedding jacket stitched 🧥" },
+      { id: "event46", date: "20-12-2024", description: "Return ticket date changed ✈️" },
+      { id: "event47", date: "27-12-2024", description: "Honeymoon tickets booked 🏖️" },
+      { id: "event48", date: "29-12-2024", description: "Chella Kutti – Bride to be 👰" },
+      { id: "event49", date: "01-01-2025", description: "New year without you 😔" },
+      { id: "event50", date: "02-01-2025", description: "Custom e-invite done 💌" },
+      { id: "event51", date: "05-01-2025", description: "NOC from Pollachi mosque 📜" },
+      { id: "event52", date: "07-01-2025", description: "Big decision: study abroad 🎓🌏" },
+      { id: "event53", date: "16-01-2025", description: "Kuku pa got a diamond necklace 💎" },
+      { id: "event54", date: "31-01-2025", description: "Flight to India for our big day 🇮🇳" },
+      { id: "event55", date: "01-02-2025", description: "Big airline shock 😱" },
+      { id: "event56", date: "02-02-2025", description: "Met Kuku pa at airport 🛬❤️" },
+      { id: "event57", date: "03-02-2025", description: "Collected wedding dress together 👗" },
+      { id: "event58", date: "05-02-2025", description: "Our new car 🚗✨" },
+      { id: "event59", date: "06-02-2025", description: "First ride and kiss in new car 💋" },
+      { id: "event60", date: "07-02-2025", description: "Mehndi day 🌿" },
+      { id: "event61", date: "08-02-2025", description: "Engagement day 💍" },
+      { id: "event62", date: "09-02-2025", description: "Wedding day 💒❤️" },
+      { id: "event63", date: "10-02-2025", description: "Reception day 🎉" },
+      { id: "event64", date: "11-02-2025", description: "Post-wedding photoshoot 📸" },
+      { id: "event65", date: "14-02-2025", description: "First Valentine’s Day ❤️🌹" },
+      { id: "event66", date: "15-02-2025", description: "Honeymoon shopping 1 🛍️" },
+      { id: "event67", date: "16-02-2025", description: "Honeymoon shopping 2 🛍️" },
+      { id: "event68", date: "18-02-2025", description: "Phone broke 📱💔" },
+      { id: "event69", date: "19-02-2025", description: "Flight to honeymoon 🛫" },
+      { id: "event70", date: "20-02-2025", description: "Tiger cub fun 🐯💕" },
+      { id: "event71", date: "21-02-2025", description: "First birthday with you 🎂❤️" },
+      { id: "event72", date: "22-02-2025", description: "Scary parachute landing 😱" },
+      { id: "event73", date: "24-02-2025", description: "Honeymoon ended 💔" },
+      { id: "event74", date: "27-02-2025", description: "First movie date after wedding 🎥" },
+      { id: "event75", date: "02-03-2025", description: "Unexpected fever 🤒" },
+      { id: "event76", date: "04-03-2025", description: "Marriage certificate received 📜" },
+      { id: "event77", date: "09-03-2025", description: "Left Kuku pa after marriage 😢" },
+      { id: "event78", date: "16-03-2025", description: "Applied for tourist visa 🛂" },
+      { id: "event79", date: "31-03-2025", description: "First Eid without you 😔" },
+      { id: "event80", date: "04-04-2025", description: "You were icon of the batch 🏆" },
+      { id: "event81", date: "04-04-2025", description: "Visa rejection 💔" },
+      { id: "event82", date: "21-04-2025", description: "Rasam rice cooked for the first time 🍲" },
+      { id: "event83", date: "15-05-2025", description: "Promotion at work 🎉" },
+      { id: "event84", date: "06-06-2025", description: "Second Eid without you 😔" },
+      { id: "event85", date: "23-06-2025", description: "Kuku pa baked her first cake 🍰" },
+      { id: "event86", date: "07-07-2025", description: "Love goes to Mecca 🕋" },
+      { id: "event87", date: "08-07-2025", description: "You did your first Umrah 🌙" },
+      { id: "event88", date: "03-08-2025", description: "Happy Birthday My Love ❤️🎂" }
+    ];
+
+    const timeline = document.querySelector(".timeline");
+
+    events.forEach((event, i) => {
+      const div = document.createElement("div");
+      div.className = "event";
+      div.setAttribute("id", event.id); // Set ID for navigation
+      div.setAttribute("data-aos", i % 2 === 0 ? "zoom-in" : "fade-up");
+      div.innerHTML = `<div class="date">${event.date}</div><div class="description">${event.description}</div>`;
+      timeline.appendChild(div);
+    });
+
+    // Function to determine the season based on the month
+    function getSeason(month) {
+      if (month >= 2 && month <= 4) return 'spring'; // March to May
+      if (month >= 5 && month <= 7) return 'summer'; // June to August
+      if (month >= 8 && month <= 10) return 'autumn'; // September to November
+      return 'winter'; // December to February
+    }
+
+    // Function to change the background based on the current season
+    function changeSeason() {
+      const currentMonth = new Date().getMonth(); // 0 = January, 1 = February, ..., 11 = December
+      const season = getSeason(currentMonth);
+      document.body.classList.add(season); // Add the corresponding season class to the body
+    }
+
+    // Apply the seasonal theme on page load
+    changeSeason();
+
+
+
+
+
+
+
+
+
+
+function createFloatingHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'floating-heart';
+  heart.innerText = '❤️';
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.fontSize = (Math.random() * 0.5 + 1.2) + 'rem'; // Bigger than before
+  heart.style.animationDuration = (Math.random() * 3 + 3) + 's'; // 3 to 6s
+  heart.style.animationDelay = (Math.random() * 1) + 's';
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 7000);
+}
+
+// Generate more hearts more often
+setInterval(() => {
+  for (let i = 0; i < 3; i++) createFloatingHeart(); // 3 hearts per interval
+}, 300); // Every 300ms
+
+
+
+
+  const element = document.getElementById('typed-text');
+  const fullText = element.dataset.text;
+  let i = 0;
+
+  function type() {
+    if (i < fullText.length) {
+      const char = fullText.charAt(i);
+      element.innerHTML += (char === "\n") ? "<br>" : char;
+      i++;
+      setTimeout(type, 35); // typing speed
+    }
+  }
+
+  type();
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>
