@@ -58,295 +58,316 @@
     }
 
     .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    max-width: 1000px;
-    margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
     }
 
-   .gallery img {
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
-  transform-origin: center center;
-  will-change: transform;
-}
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.6s ease, box-shadow 0.6s ease;
+      transform-origin: center center;
+      will-change: transform;
+    }
 
-.gallery img:hover {
-  transform: scale(1.1) rotateZ(0.5deg);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
+    .gallery img:hover {
+      transform: scale(1.1) rotateZ(0.5deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
 
+    .timeline {
+      position: relative;
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 0;
+    }
 
- .timeline {
-  position: relative;
-  max-width: 1000px;
-  margin: auto;
-  padding: 40px 0;
-}
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: #d63384;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-.timeline::after {
-  content: '';
-  position: absolute;
-  width: 4px;
-  background-color: #d63384;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
+    .timeline-item {
+      padding: 20px 30px;
+      position: relative;
+      width: 50%;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.6s ease-out;
+    }
 
-.timeline-item {
-  padding: 20px 30px;
-  position: relative;
-  width: 50%;
-  box-sizing: border-box;
-}
+    .timeline-item img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.6s ease, box-shadow 0.6s ease;
+      transform-origin: center center;
+    }
 
-.timeline-item img {
-  width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
-  transform-origin: center center;
-}
+    .timeline-item img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
 
-.timeline-item img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-}
+    .timeline-item .caption {
+      margin-top: 10px;
+      background: #fff0f5;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #d63384;
+    }
 
+    .timeline-item.left {
+      left: 0;
+      text-align: right;
+    }
 
-.timeline-item .caption {
-  margin-top: 10px;
-  background: #fff0f5;
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  color: #d63384;
-}
+    .timeline-item.right {
+      left: 50%;
+      text-align: left;
+    }
 
-.timeline-item.left {
-  left: 0;
-  text-align: right;
-}
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      width: 20px;
+      height: 20px;
+      background-color: #d63384;
+      border-radius: 50%;
+      z-index: 1;
+    }
 
-.timeline-item.right {
-  left: 50%;
-  text-align: left;
-}
+    .timeline-item.left::before {
+      right: -10px;
+    }
 
-.timeline-item::before {
-  content: "";
-  position: absolute;
-  top: 20px;
-  width: 20px;
-  height: 20px;
-  background-color: #d63384;
-  border-radius: 50%;
-  z-index: 1;
-}
+    .timeline-item.right::before {
+      left: -10px;
+    }
 
-.timeline-item.left::before {
-  right: -10px;
-}
+    /* Animation keyframes */
+    @keyframes fadeInLeft {
+      0% { opacity: 0; transform: translateX(-50px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
 
-.timeline-item.right::before {
-  left: -10px;
-}
+    @keyframes fadeInRight {
+      0% { opacity: 0; transform: translateX(50px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
 
+    .timeline-item.visible.left {
+      animation: fadeInLeft 1s ease forwards;
+    }
 
+    .timeline-item.visible.right {
+      animation: fadeInRight 1s ease forwards;
+    }
 
+    .heart-particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-/* Animation keyframes */
-@keyframes fadeInLeft {
-  0% { opacity: 0; transform: translateX(-50px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: floatHeart 15s linear infinite;
+      opacity: 0.7;
+    }
 
-@keyframes fadeInRight {
-  0% { opacity: 0; transform: translateX(50px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+    }
 
-/* Apply animation only when in view */
-.timeline-item {
-  opacity: 0;
-  transition: opacity 0.6s ease-out;
-}
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
 
-.timeline-item.visible.left {
-  animation: fadeInLeft 1s ease forwards;
-}
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
 
-.timeline-item.visible.right {
-  animation: fadeInRight 1s ease forwards;
-}
+    @keyframes floatHeart {
+      0% {
+        bottom: -20px;
+        transform: translateX(0) rotate(45deg);
+        opacity: 0;
+      }
+      30% {
+        transform: translateX(10px) rotate(45deg);
+        opacity: 0.5;
+      }
+      60% {
+        transform: translateX(-10px) rotate(45deg);
+        opacity: 0.8;
+      }
+      100% {
+        bottom: 100%;
+        transform: translateX(-30px) rotate(45deg);
+        opacity: 0;
+      }
+    }
 
+    #letter-text {
+      background: #fffafc;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      font-family: 'Pacifico', cursive;
+      color: #d63384;
+    }
 
+    /* Responsive Mobile Styles */
+    @media (max-width: 768px) {
+      header {
+        height: 60vh;
+        padding: 20px;
+      }
 
-.heart-particles {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
+      header h1 {
+        font-size: 32px;
+      }
 
-.heart {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: pink;
-  transform: rotate(45deg);
-  animation: floatHeart 15s linear infinite; /* slowed from 8s to 15s */
-  opacity: 0.7;
-}
+      header p {
+        font-size: 18px;
+      }
 
-.heart::before,
-.heart::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: pink;
-  border-radius: 50%;
-}
+      .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        padding: 0 10px;
+      }
 
-.heart::before {
-  top: -10px;
-  left: 0;
-}
+      section {
+        padding: 40px 10px;
+      }
 
-.heart::after {
-  left: -10px;
-  top: 0;
-}
+      h2 {
+        font-size: 24px;
+      }
 
-@keyframes floatHeart {
-  0% {
-    bottom: -20px;
-    transform: translateX(0) rotate(45deg);
-    opacity: 0;
-  }
-  30% {
-    transform: translateX(10px) rotate(45deg);
-    opacity: 0.5;
-  }
-  60% {
-    transform: translateX(-10px) rotate(45deg);
-    opacity: 0.8;
-  }
-  100% {
-    bottom: 100%;
-    transform: translateX(-30px) rotate(45deg);
-    opacity: 0;
-  }
-}
+      .timeline {
+        padding: 20px 10px;
+      }
 
+      .timeline-item {
+        width: 100% !important;
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+        margin-bottom: 30px;
+      }
 
+      .timeline-item.left,
+      .timeline-item.right {
+        left: 0 !important;
+        text-align: center !important;
+      }
 
-#letter-text {
-  background: #fffafc;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  font-family: 'Pacifico', cursive;
-  color: #d63384;
-}
+      .timeline::after {
+        left: 20px;
+      }
 
+      .timeline-item::before {
+        left: 0 !important;
+        right: auto !important;
+        top: 15px;
+      }
 
+      video {
+        width: 100% !important;
+        height: auto !important;
+      }
 
-/* Responsive Mobile Styles */
-@media (max-width: 768px) {
-  header {
-    height: 60vh;
-    padding: 20px;
-  }
+      #quiz-screen input[type="text"] {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
 
-  header h1 {
-    font-size: 32px;
-  }
+    #cake-img {
+      animation: bounce 2s infinite;
+    }
 
-  header p {
-    font-size: 18px;
-  }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
-  .gallery {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-    padding: 0 10px;
-  }
+    /* Timeline Button styles */
+    .timeline-item.center-btn {
+      width: 100% !important;
+      left: 0 !important;
+      text-align: center !important;
+      padding: 25px 0;
+      position: relative;
+      margin-top: 40px;
+      opacity: 1 !important;
+    }
 
-  section {
-    padding: 40px 10px;
-  }
+    .timeline-item.center-btn::before {
+      display: none !important;
+    }
 
-  h2 {
-    font-size: 24px;
-  }
+    .timeline-btn {
+      display: inline-block;
+      background: #d63384;
+      color: white;
+      padding: 15px 30px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 18px;
+      box-shadow: 0 5px 12px rgba(214, 51, 132, 0.7);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
 
-  .timeline {
-    padding: 20px 10px;
-  }
+    .timeline-btn:hover {
+      background: #b82a6b;
+      box-shadow: 0 7px 16px rgba(184, 42, 107, 0.9);
+    }
 
-  /* Timeline items stack vertically and full width */
-  .timeline-item {
-    width: 100% !important;
-    padding-left: 30px !important;
-    padding-right: 30px !important;
-    margin-bottom: 30px;
-  }
+    @media (max-width: 768px) {
+      .timeline-item.center-btn {
+        padding: 20px 10px;
+      }
 
-  /* Remove left/right alignment, center items */
-  .timeline-item.left,
-  .timeline-item.right {
-    left: 0 !important;
-    text-align: center !important;
-  }
-
-  /* Adjust timeline line position */
-  .timeline::after {
-    left: 20px;
-  }
-
-  /* Position timeline dots on left */
-  .timeline-item::before {
-    left: 0 !important;
-    right: auto !important;
-    top: 15px;
-  }
-
-  /* Make videos full width */
-  video {
-    width: 100% !important;
-    height: auto !important;
-  }
-
-  /* Quiz screen inputs full width */
-  #quiz-screen input[type="text"] {
-    width: 100%;
-    box-sizing: border-box;
-  }
-}
-
-
-#cake-img {
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-
-
+      .timeline-btn {
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 0;
+      }
+    }
   </style>
+
 </head>
 <body>
 
@@ -504,25 +525,25 @@
       <img src="Images/timeline4.jpg" alt="Memory 4">
       <div class="caption">✈️ First trip together – 20th Feb 2025</div>
     </div>
+     <!-- Timeline Button at the end -->
+      <div class="timeline-item center-btn">
+        <a href="timeline.html" class="timeline-btn">📅 View Our Full Timeline</a>
+      </div>
+
   </div>
 </section>
 
 
-  <!-- Message Section -->
-  <section id="message">
-    <h2>💌 A Message from Me</h2>
-    <p>(You can write a love letter or surprise message here!)</p>
-  </section>
 
 <section id="love-letter">
-    <h2>💖 My Love Letter to You</h2>
+    <h2>💖 My Heart’s Whisper</h2>
     <div id="letter-text" style="max-width: 700px; margin: auto; font-size: 20px; line-height: 1.6; white-space: pre-wrap;"></div>
 </section>
 
 
   <!-- Footer -->
   <footer>
-    Made with ❤️ by Mohamed Azeez | Surprise for 4 August
+    Made with ❤️ by Mohamed Azeez | Surprise for 3 August
   </footer>
 
 
@@ -670,7 +691,7 @@ function showBirthdayAnimation() {
 
 <script>
  
- const birthday = new Date("2025-08-03T00:00:00+10:00").getTime();
+ const birthday = new Date("2025-07-03T00:00:00+10:00").getTime();
 
 const timer = setInterval(function () {
   const now = new Date().getTime();
