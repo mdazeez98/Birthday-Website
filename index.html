@@ -84,7 +84,7 @@
       position: relative;
       max-width: 1000px;
       margin: auto;
-      padding: 40px 0;
+      padding: 40px 0 120px 0;
     }
 
     .timeline::after {
@@ -93,9 +93,24 @@
       width: 4px;
       background-color: #d63384;
       top: 0;
-      bottom: 0;
+      height: calc(100% - 180px); 
       left: 50%;
       transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #d63384;
+      border-radius: 50%;
+      left: 50%;
+      bottom: 180px; /* same value as line height offset */
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px rgba(214, 51, 132, 0.7);
+      z-index: 2;
     }
 
     .timeline-item {
@@ -366,6 +381,35 @@
         padding: 12px 0;
       }
     }
+
+    .timeline-line {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: calc(100vh - 100px);
+      background-color: red;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    #timeline-btn {
+      position: absolute;
+      top: calc(100vh - 100px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 16px 28px;
+      font-size: 1.1rem;
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+
   </style>
 
 </head>
@@ -526,10 +570,22 @@
       <div class="caption">✈️ First trip together – 20th Feb 2025</div>
     </div>
      <!-- Timeline Button at the end -->
-      <div class="timeline-item center-btn">
-        <a href="timeline.html" class="timeline-btn">📅 View Our Full Timeline</a>
-      </div>
-
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 60px;">
+    <button id="timelineBtn" disabled style="
+      padding: 18px 36px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 16px;
+      background-color: gray;
+      color: white;
+      cursor: not-allowed;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    ">
+    ⏳ Unlocks in: calculating...
+    </button>
+    </div>
   </div>
 </section>
 
@@ -757,6 +813,38 @@ const timer = setInterval(function () {
 }, 1000);
 
 </script>
+
+
+<script>
+  const button = document.getElementById("timelineBtn");
+  const launchTime = new Date("2025-08-04T12:14:00").getTime();
+
+  const countdownInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = launchTime - now;
+
+    if (distance <= 0) {
+      clearInterval(countdownInterval);
+      button.innerText = "💖 Our Love Timeline";
+      button.disabled = false;
+      button.style.backgroundColor = "#ff3366";
+      button.style.cursor = "pointer";
+      button.onclick = () => {
+        window.location.href = "timeline.html";
+      };
+    } else {
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+     button.innerText = `💕 When my Saathu Kutti was born, the world became brighter...
+⏳ Our Love Timeline Unlocks in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+    }
+  }, 1000);
+</script>
+
 
 
 
