@@ -329,6 +329,11 @@
     }
 
     #cake-img {
+      width: 320px;
+      max-width: 80vw;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(255, 20, 147, 0.7);
+      margin-bottom: 30px;
       animation: bounce 2s infinite;
     }
 
@@ -410,6 +415,356 @@
     }
 
 
+
+    .starry-wishes {
+      position: relative;
+      background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000 100%);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Shooting stars */
+    .shooting-stars::before, .shooting-stars::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 80px;
+      background: linear-gradient(-45deg, white, transparent);
+      top: 0;
+      left: 0;
+      animation: shooting-star 4s infinite;
+      opacity: 0.6;
+    }
+    .shooting-stars::after {
+      animation-delay: 2s;
+      left: 60%;
+    }
+    @keyframes shooting-star {
+      0% { transform: translate(-100px, -100px) rotate(45deg); opacity: 0; }
+      30% { opacity: 1; }
+      100% { transform: translate(400px, 400px) rotate(45deg); opacity: 0; }
+    }
+
+    /* Wishes */
+    .wishes {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .wish {
+      font-size: 1.2rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px 25px;
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+      opacity: 0.7;
+      transition: all 0.5s ease;
+      cursor: pointer;
+    }
+
+    /* Revealed wishes */
+    .wish.revealed {
+      background-color: rgba(255, 105, 180, 0.3);
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.7);
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    /* Locked wishes */
+    .wish.locked {
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .wish.locked:first-child {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+
+    /* Starry background container */
+    .star-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    /* Individual stars */
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+
+    /* Randomize star placement */
+    .star:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+    .star:nth-child(2) { top: 30%; left: 50%; animation-delay: 0.4s; }
+    .star:nth-child(3) { top: 70%; left: 80%; animation-delay: 1s; }
+    .star:nth-child(4) { top: 20%; left: 75%; animation-delay: 1.3s; }
+    .star:nth-child(5) { top: 85%; left: 25%; animation-delay: 0.2s; }
+    .star:nth-child(6) { top: 60%; left: 40%; animation-delay: 1.6s; }
+    .star:nth-child(7) { top: 15%; left: 10%; animation-delay: 0.9s; }
+    .star:nth-child(8) { top: 40%; left: 65%; animation-delay: 0.6s; }
+    .star:nth-child(9) { top: 75%; left: 15%; animation-delay: 1.1s; }
+    .star:nth-child(10) { top: 5%; left: 90%; animation-delay: 0.3s; }
+
+    /* Twinkle animation */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.4); }
+    }
+
+
+
+
+    .birthday-cake {
+      background: #fef6f0;
+      padding: 60px 20px;
+      text-align: center;
+      position: relative;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .cake {
+      position: relative;
+      margin: 0 auto;
+      width: 120px;
+    }
+
+    .layer {
+      width: 100%;
+      height: 30px;
+      background: #ff9aa2;
+      border-radius: 10px;
+      margin-bottom: 5px;
+      box-shadow: 0 3px 0 #d87a7a;
+    }
+
+    .layer-middle { background: #fbc4ab; }
+    .layer-top { background: #ffe1a8; }
+
+    .candle {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      width: 10px;
+      height: 40px;
+      background: #fff;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    .flame {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      width: 12px;
+      height: 20px;
+      background: radial-gradient(ellipse at center, #ffa600 0%, #ff3d00 60%, transparent 80%);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.3s infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); opacity: 1; }
+      to { transform: translateX(-50%) scale(1.1); opacity: 0.7; }
+    }
+
+    .blow-candle-btn {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #ffb347;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .blow-candle-btn:hover {
+      background: #ff9f1c;
+    }
+
+    .birthday-wish {
+      font-size: 22px;
+      max-width: 90%;
+      line-height: 1.6;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.8s ease;
+      color: #ffafcc;
+      text-shadow: 0 0 8px #ff4e91;
+    }
+
+    .birthday-wish {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #d16ba5;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s ease;
+    }
+
+    .birthday-wish.show {
+      opacity: 1;
+      transform: scale(1.1);
+      animation: sparkle 1.5s ease-out;
+    }
+
+    @keyframes sparkle {
+      0% {
+        text-shadow: 0 0 0px #fff;
+      }
+      50% {
+        text-shadow: 0 0 10px #ffd700, 0 0 20px #ff4e91;
+      }
+      100% {
+        text-shadow: 0 0 0px #fff;
+      }
+    }
+
+    #birthday-section {
+      min-height: 80vh;           /* almost fullscreen but not too tall */
+      max-width: 700px;           /* keep content nicely centered & narrow */
+      margin: 40px auto;          /* vertical spacing + center horizontally */
+      background: radial-gradient(circle at center, #3b0a45, #1a001f);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 20, 147, 0.5);
+      padding: 40px 30px;
+      color: #ffe1a8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .cake-container {
+      text-align: center;
+      padding: 20px;
+    }
+
+    #birthday-section {
+      animation: fadeIn 1.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+
+
+    .sparkles {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      pointer-events: none;
+      background: transparent;
+      background-image:
+        radial-gradient(circle 2px, #ff69b4 90%, transparent 100%),
+        radial-gradient(circle 3px, #ff1493 90%, transparent 100%);
+      background-repeat: repeat;
+      background-position: 0 0, 50px 50px;
+      animation: sparkleMove 8s linear infinite;
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    @keyframes sparkleMove {
+      from {
+        background-position: 0 0, 50px 50px;
+      }
+      to {
+        background-position: 100px 100px, 150px 150px;
+      }
+    }
+
+
+    #gift-box:hover #gift-img {
+      transform: scale(1.1) rotate(-10deg);
+      filter: drop-shadow(0 0 6px #ff1493);
+      transition: transform 0.3s ease;
+    }
+
+
+    #gift-section {
+      background: linear-gradient(135deg, #ffe0f0, #ffc8dd);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    #gift-container {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #gift-img {
+      width: 180px;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 10px #ff69b4);
+    }
+
+    #gift-container:hover #gift-img {
+      transform: scale(1.1);
+    }
+
+    #gift-content {
+      display: none;
+      text-align: center;
+      margin-top: 30px;
+      color: #c2185b;
+      font-size: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #gift-content img {
+      max-width: 90%;
+      margin-top: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+
+
+
   </style>
 
 </head>
@@ -422,6 +777,10 @@
   Your browser does not support the audio element.
 </audio>
 
+
+<audio id="blowSound" preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2023/02/14/audio_2aeb13a927.mp3" type="audio/mpeg">
+</audio>
 
 <div id="countdown-screen" style="
   position: fixed;
@@ -505,6 +864,71 @@
     <h1>Happy Birthday, My Love 💖</h1>
     <p>Here's to us and all our beautiful memories...</p>
   </header>
+
+
+  <!-- Cake Section -->
+  <section id="birthday-section">
+  <div class="sparkles"></div>
+  <div class="cake-container">
+  <section class="birthday-cake">
+    <div class="cake">
+      <div class="layer layer-bottom"></div>
+      <div class="layer layer-middle"></div>
+      <div class="layer layer-top"></div>
+      <div class="candle">
+        <div class="flame"></div>
+      </div>
+    </div>
+    <button class="blow-candle-btn" onclick="blowCandle()">🎈 Blow Candle</button>
+    <div class="birthday-wish" id="wishMessage">🎉 Make a wish, my love... 🎂</div>
+  </section>
+  </div>
+  </section>
+
+
+  <!-- Wish Section -->
+  <section class="starry-wishes">
+    <div class="star-background">
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    </div>
+    <div class="shooting-stars"></div>
+    <div class="wishes">
+      <div class="wish locked" onclick="revealWish(0)">💌 Tap to reveal Wish 1</div>
+      <div class="wish locked" onclick="revealWish(1)">🔒 Locked</div>
+      <div class="wish locked" onclick="revealWish(2)">🔒 Locked</div>
+    </div>
+  </section>
+
+  <!-- Gift Box Section -->
+  <section id="gift-section">
+    <div id="gift-container">
+      <img src="Images/gift-box-closed.png" alt="Gift Box" id="gift-img" />
+      <p>Click the gift to open your surprise! 🎁</p>
+    </div>
+
+    <div id="gift-content">
+      <h2>🎉 Surprise! 🎉</h2>
+      <p>You are the most precious gift of my life 💖</p>
+      <img src="Images/Sept.png" alt="Surprise" style="width: 80%; max-width: 400px;" />
+    </div>
+  </section>
+
+
+
 
   <!-- Photos Section -->
   <section id="photos">
@@ -747,7 +1171,7 @@ function showBirthdayAnimation() {
 
 <script>
  
- const birthday = new Date("2025-08-03T00:00:00+10:00").getTime();
+ const birthday = new Date("2025-07-03T00:00:00+10:00").getTime();
 
 const timer = setInterval(function () {
   const now = new Date().getTime();
@@ -817,7 +1241,7 @@ const timer = setInterval(function () {
 
 <script>
   const button = document.getElementById("timelineBtn");
-  const launchTime = new Date("2025-08-04T12:14:00").getTime();
+  const launchTime = new Date("2025-07-04T12:14:00").getTime();
 
   const countdownInterval = setInterval(() => {
     const now = new Date().getTime();
@@ -844,6 +1268,108 @@ const timer = setInterval(function () {
     }
   }, 1000);
 </script>
+
+<script>
+  const wishMessages = [
+    "💫 Wish 1: May you always smile like this.",
+    "🌟 Wish 2: May your dreams come true.",
+    "💖 Wish 3: I’ll love you forever and ever."
+  ];
+
+  function revealWish(index) {
+    const wishes = document.querySelectorAll(".wish");
+    const currentWish = wishes[index];
+    currentWish.classList.add("revealed");
+    currentWish.classList.remove("locked");
+    currentWish.innerHTML = wishMessages[index];
+
+    if (wishes[index + 1]) {
+      wishes[index + 1].classList.remove("locked");
+    }
+  }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+
+<script>
+  function blowCandle() {
+    // Hide the flame
+    document.querySelector('.flame').style.display = 'none';
+
+    // Play the candle blow sound
+    document.getElementById('blowSound').play();
+
+    // Update and animate the wish text
+    const wish = document.getElementById('wishMessage');
+    wish.innerHTML = '💖 May your year be filled with magic, laughter, and love! 🎁';
+    wish.classList.add('show');
+
+    // Launch confetti
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ff4e91', '#ffd700', '#ff6f61']
+    });
+
+    // Launch soft fireworks
+    launchFireworks();
+  }
+</script>
+
+
+<canvas id="fireworkCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;"></canvas>
+
+<script>
+  const canvas = document.getElementById('fireworkCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  function launchFireworks() {
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          spread: 90,
+          angle: Math.random() * 360,
+          origin: {
+            x: Math.random(),
+            y: Math.random() * 0.5
+          },
+          colors: ['#ffe1a8', '#ff4e91', '#d16ba5']
+        });
+      }, i * 500);
+    }
+  }
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const giftBox = document.getElementById('gift-container');
+    const giftImg = document.getElementById('gift-img');
+    const giftContent = document.getElementById('gift-content');
+
+    giftBox.addEventListener('click', () => {
+      giftImg.src = 'Images/gift-box-open.png'; // Update to your path
+      giftContent.style.display = 'block';
+    });
+  });
+</script>
+
+<script>
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
+</script>
+
 
 
 
