@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>100 Reasons Why I Love You 💘</title>
+
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" as="style" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Noto Color Emoji', sans-serif;
+      background: linear-gradient(to bottom, #e1bee7, #9c27b0);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-top: 20px;
+      color: #fff;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    .love-reasons {
+      text-align: center;
+      padding: 20px 10px 60px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .flip-card {
+      perspective: 1000px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.2s ease-out;
+    }
+
+    .flip-inner {
+      width: 100%;
+      height: 150px;
+      transition: transform 0.4s ease;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      padding: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .flip-front {
+      background: #ffccd5;
+      font-size: 1.8rem;
+    }
+
+    .flip-back {
+      background: #ff99aa;
+      transform: rotateY(180deg);
+      color: white;
+    }
+
+    .flip-card.revealed .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Floating hearts */
+    @keyframes floatHeart {
+      0% { transform: translateY(0) scale(1); opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+    }
+    .floating-heart {
+      position: fixed;
+      bottom: -20px;
+      left: 0;
+      font-size: 1.5rem;
+      color: rgba(255, 105, 135, 0.7);
+      animation: floatHeart linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Back to Timeline Button */
+    .back-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #e75480;
+      color: white;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      z-index: 1000;
+    }
+    .back-btn:hover {
+      background-color: #d43d6f;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .flip-inner {
+        height: 130px;
+      }
+      .flip-front {
+        font-size: 1.6rem;
+      }
+      .flip-back {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="love-reasons">
+    <h2>💘 100 Reasons Why I Love You 💘</h2>
+    <div class="card-grid"></div>
+  </section>
+
+  <a href="timeline.html" class="back-btn">⬅️ Timeline</a>
+
+  <script>
+    const reasons = [
+      "You make me smile every day 😊",
+      "You always support me 🫶",
+      "Your smile melts my heart 😍",
+      "You're my safe place 💞",
+      "You believe in me ✨",
+      "Your hugs feel like home 🤗",
+      "You understand me without words 💌",
+      "You're my best friend and my love ❤️",
+      "You make even bad days better 🌈",
+      "You are my forever person 💍",
+      "The way you say my name melts me 💕",
+      "You send the sweetest good morning texts ☀️",
+      "Your laugh is my favorite sound 🎶",
+      "You never give up on us 🙏",
+      "You hold my hand perfectly 🖐️❤️",
+      "You make me want to be better 💪",
+      "You are the kindest soul I know 🌸",
+      "You cook for me with love 🍲",
+      "You listen to me patiently 👂",
+      "You're my biggest cheerleader 📣",
+      "You share your dreams with me 🌠",
+      "You remember the little things 📝",
+      "You look adorable when you're sleepy 💤",
+      "You trust me completely 🤝",
+      "You're my happy place 🏡",
+      "You dance with me even when there's no music 💃",
+      "You never stop believing in us 💖",
+      "You make me laugh until I cry 😂",
+      "You know how to calm my storms 🌧️☀️",
+      "You inspire me every day 🌟",
+      "Your eyes are the most beautiful universe ✨",
+      "You love me at my worst 🥺",
+      "You kiss away my worries 😘",
+      "You're my partner in everything 🤝",
+      "You make every ordinary day magical ✨",
+      "You send me random cute messages 📱",
+      "You look amazing in every outfit 👗",
+      "You're the reason I believe in love ❤️",
+      "You sing for me even if off-key 🎤",
+      "You never let me feel alone 🌙",
+      "You dream big with me 🌌",
+      "You are the calm to my chaos 🌊",
+      "You always find ways to surprise me 🎁",
+      "You're the sweetest part of my day 🍫",
+      "You protect me like a shield 🛡️",
+      "You support my crazy ideas 😂",
+      "You are patient with my flaws 🩹",
+      "You make love feel effortless 💞",
+      "You're my favorite notification 🔔",
+      "You bring peace to my heart 🕊️",
+      "You are my biggest adventure 🌍",
+      "You never stop making me laugh 😄",
+      "You hold me like you’ll never let go 🤗",
+      "You are my favorite hello and hardest goodbye 👋💔",
+      "You encourage me to chase my dreams 🚀",
+      "You look at me like I'm the only one 💫",
+      "You are my late-night confidant 🌙",
+      "You make me feel like home 🏠",
+      "You know my favorite everything 🎯",
+      "You share in my joys 🎉",
+      "You wipe away my tears 😢❤️",
+      "You love me when I forget to love myself 💖",
+      "You're my reason for believing 🌞",
+      "You give the warmest hugs 🤍",
+      "You are my perfect match 🧩",
+      "You make my heart skip a beat 💓",
+      "You always forgive me 🙌",
+      "You bring out the best in me 🌹",
+      "You light up every room you enter 💡",
+      "You never stop holding my hand 🖐️❤️",
+      "You are my favorite story 📖",
+      "You turn ordinary into extraordinary ✨",
+      "You keep my heart young 💝",
+      "You are my sweetest dream 🌙",
+      "You understand even my silence 🤫",
+      "You give meaning to my life 🌈",
+      "You make rainy days romantic ☔❤️",
+      "You are my sunshine and my moonlight 🌞🌜",
+      "You are my safe harbor ⚓",
+      "You whisper “I love you” perfectly 💌",
+      "You fight for us when it's hard 🛡️",
+      "You love me endlessly ♾️",
+      "You kiss my forehead tenderly 💋",
+      "You are my favorite comfort food 🍯",
+      "You make my heart feel full 🏆",
+      "You never let me doubt us 💞",
+      "You're my partner in silly adventures 🎢",
+      "You love my quirks 😂",
+      "You hold my world together 🌎",
+      "You're my miracle ✨",
+      "You’re the poetry I didn’t know I needed ✍️",
+      "You’re my warm coffee on cold mornings ☕",
+      "You’re my late-night laughter buddy 🌃",
+      "You’re my favorite place to be 🏡",
+      "You're the reason my soul smiles 😊",
+      "You're my heart's home ❤️",
+      "You're the answer to my prayers 🙏",
+      "You're the best part of me 💕",
+      "You're the love of my life 💍",
+      "You're my Saathu Kutti forever 🐻💕"
+    ];
+
+    const grid = document.querySelector(".card-grid");
+    const proximityRadius = 120;
+    const tiltRadius = 300;
+
+    reasons.forEach(reason => addCard(reason));
+
+    function addCard(text) {
+      const card = document.createElement("div");
+      card.className = "flip-card";
+      card.innerHTML = `
+        <div class="flip-inner">
+          <div class="flip-front">❤️</div>
+          <div class="flip-back">${text}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    }
+
+    const cards = document.querySelectorAll(".flip-card");
+
+    document.addEventListener("mousemove", (e) => {
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const distance = Math.hypot(centerX - e.clientX, centerY - e.clientY);
+
+        const inner = card.querySelector(".flip-inner");
+
+        if (distance < proximityRadius) {
+          card.classList.add("revealed");
+        } else {
+          card.classList.remove("revealed");
+        }
+
+        if (distance < tiltRadius) {
+          const angleX = (e.clientY - centerY) / 20;
+          const angleY = (centerX - e.clientX) / 20;
+          card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+        } else {
+          card.style.transform = "rotateX(0) rotateY(0)";
+        }
+      });
+    });
+
+    cards.forEach(card => {
+      card.addEventListener("touchstart", () => {
+        card.classList.add("revealed");
+        setTimeout(() => card.classList.remove("revealed"), 2000);
+      });
+    });
+
+    // Floating hearts effect
+    function createFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerText = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 0.5 + 1.2) + 'rem';
+      heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+    setInterval(() => { for (let i = 0; i < 2; i++) createFloatingHeart(); }, 400);
+  </script>
+</body>
+</html>

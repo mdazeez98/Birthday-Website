@@ -1308,13 +1308,17 @@ const timer = setInterval(function () {
 
     // Launch confetti
     confetti({
-      particleCount: 150,
-      spread: 70,
+      particleCount: 1500,
+      spread: 150,
       origin: { y: 0.6 },
       colors: ['#ff4e91', '#ffd700', '#ff6f61']
     });
 
     // Launch soft fireworks
+    launchFireworks();
+    launchFireworks();
+    launchFireworks();
+    launchFireworks();
     launchFireworks();
   }
 </script>
