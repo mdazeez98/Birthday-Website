@@ -230,6 +230,36 @@
   }
 
 
+  .reasons-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* Fixed on the right side */
+    background-color: #e75480;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-family: 'Arial', sans-serif;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+  }
+
+  .reasons-btn:hover {
+    background-color: #d43d6f;
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 600px) {
+    .reasons-btn {
+      font-size: 1rem;
+      padding: 10px 18px;
+    }
+  }
+
+
   </style>
 </head>
 
@@ -240,6 +270,8 @@
   </div>
 
 <a href="index.html" class="back-home-btn">⬅️ Home</a>
+<a href="100-reasons.html" class="reasons-btn">💘 100 Reasons Why I Love You </a>
+
 
 <div class="love-note-wrapper">
   <div class="love-note">
