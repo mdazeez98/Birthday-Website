@@ -269,7 +269,7 @@
     <!-- Timeline events will be inserted here -->
   </div>
 
-<a href="index.html" class="back-home-btn">⬅️ Home</a>
+<a href="index.html" class="back-home-btn" id="homeButton">⬅️ Home</a>
 <a href="100-reasons.html" class="reasons-btn">💘 100 Reasons Why I Love You </a>
 
 
@@ -482,6 +482,14 @@ setInterval(() => {
 
 
   </script>
+
+<script>
+  document.getElementById('homeButton').addEventListener('click', function(event) {
+    sessionStorage.setItem('comingFromTimeline', 'true');
+  });
+</script>
+
+
 </body>
 
 </html>

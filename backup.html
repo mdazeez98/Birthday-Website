@@ -1171,93 +1171,77 @@ function showBirthdayAnimation() {
 
 <script>
  
-  // Check if returning from timeline page
-  const comingFromTimeline = sessionStorage.getItem('comingFromTimeline');
+ const birthday = new Date("2025-07-03T00:00:00+05:30").getTime();
 
-  if (comingFromTimeline === 'true') {
-      // If coming from timeline, clear the flag and directly show the main site
-      sessionStorage.removeItem('comingFromTimeline'); // Clear the flag
-      document.getElementById("countdown-screen").style.display = "none";
-      document.getElementById("quiz-screen").style.display = "none";
-      document.getElementById("main-site").style.opacity = 1; // Show main site
-      document.getElementById("birthday-animation").style.display = 'none'; // Ensure animation is hidden
-      // Play birthday audio if desired on return
-      document.getElementById("birthday-audio").play().catch(e => console.error("Audio play failed:", e));
+const timer = setInterval(function () {
+  const now = new Date().getTime();
+  const distance = birthday - now;
 
-  } else {
-      // Existing countdown and quiz logic will run normally
-      const birthday = new Date("2025-08-03T00:00:00+05:30").getTime(); //
+  if (distance <= 0) {
+    clearInterval(timer);
 
-      const timer = setInterval(function () {
-        const now = new Date().getTime(); //
-        const distance = birthday - now; //
+    // Hide countdown screen
+    document.getElementById("countdown-screen").style.display = "none";
 
-        if (distance <= 0) { //
-          clearInterval(timer); //
+    // Show quiz screen
+    document.getElementById("quiz-screen").style.display = "flex";
 
-          // Hide countdown screen
-          document.getElementById("countdown-screen").style.display = "none"; //
+    // Quiz logic
+    const quizForm = document.getElementById("quiz-form");
+    const errorMsg = document.getElementById("quiz-error");
 
-          // Show quiz screen
-          document.getElementById("quiz-screen").style.display = "flex"; //
+    quizForm.addEventListener("submit", function(event) {
+  event.preventDefault();
 
-          // Quiz logic
-          const quizForm = document.getElementById("quiz-form"); //
-          const errorMsg = document.getElementById("quiz-error"); //
+  const ans1 = document.getElementById("q1").value.trim();
+  const ans2 = document.getElementById("q2").value.trim().toLowerCase();
+  const ans3 = document.getElementById("q3").value.trim();
 
-          quizForm.addEventListener("submit", function(event) { //
-            event.preventDefault(); //
+  const encodedAnswers = {
+    q1: "MDktMDItMjAyNQ==",  // 09-02-2025
+    q2: "cHVycGxl",          // purple
+    q3: "NDM1Nw=="           // 4357
+  };
 
-            const ans1 = document.getElementById("q1").value.trim(); //
-            const ans2 = document.getElementById("q2").value.trim().toLowerCase(); //
-            const ans3 = document.getElementById("q3").value.trim(); //
-
-            const encodedAnswers = { //
-              q1: "MDktMDItMjAyNQ==",  // 09-02-2025 //
-              q2: "cHVycGxl",          // purple //
-              q3: "NDM1Nw=="           // 4357 //
-            };
-
-            function decode(b64) { //
-              try { //
-                return atob(b64).trim().toLowerCase(); // Lowercase for comparison //
-              } catch (e) { //
-                return ""; //
-              }
-            }
-
-            const correct1 = ans1.trim().toLowerCase() === decode(encodedAnswers.q1); //
-            const correct2 = ans2 === decode(encodedAnswers.q2); //
-            const correct3 = ans3.trim() === decode(encodedAnswers.q3); //
-
-            if (correct1 && correct2 && correct3) { //
-              document.getElementById("quiz-screen").style.display = "none"; //
-              showBirthdayAnimation(); //
-            } else { //
-              errorMsg.textContent = "Oops! One or more answers are incorrect. Please try again."; //
-              errorMsg.style.display = "block"; //
-            }
-          });
-
-
-          return; //
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24)); //
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); //
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); //
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000); //
-
-      document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`; //
-    }, 1000); //
+  function decode(b64) {
+    try {
+      return atob(b64).trim().toLowerCase(); // Lowercase for comparison
+    } catch (e) {
+      return "";
+    }
   }
+
+  const correct1 = ans1.trim().toLowerCase() === decode(encodedAnswers.q1);
+  const correct2 = ans2 === decode(encodedAnswers.q2);
+  const correct3 = ans3.trim() === decode(encodedAnswers.q3);
+
+  if (correct1 && correct2 && correct3) {
+    document.getElementById("quiz-screen").style.display = "none";
+    showBirthdayAnimation();
+  } else {
+    errorMsg.textContent = "Oops! One or more answers are incorrect. Please try again.";
+    errorMsg.style.display = "block";
+  }
+});
+
+
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}, 1000);
 
 </script>
 
 
 <script>
   const button = document.getElementById("timelineBtn");
-  const launchTime = new Date("2025-08-03T12:14:00+05:30").getTime();
+  const launchTime = new Date("2025-07-03T12:14:00+05:30").getTime();
 
   const countdownInterval = setInterval(() => {
     const now = new Date().getTime();
