@@ -1181,8 +1181,6 @@ function showBirthdayAnimation() {
       document.getElementById("quiz-screen").style.display = "none";
       document.getElementById("main-site").style.opacity = 1; // Show main site
       document.getElementById("birthday-animation").style.display = 'none'; // Ensure animation is hidden
-      // Play birthday audio if desired on return
-      document.getElementById("birthday-audio").play().catch(e => console.error("Audio play failed:", e));
 
   } else {
       // Existing countdown and quiz logic will run normally
