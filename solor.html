@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Realistic Solar System of Love - Enhanced</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Open+Sans&display=swap" rel="stylesheet" />
+
+  <!-- Three.js and Tween.js for 3D animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #fce4ec; /* Light pink for text */
+      --secondary-color: #ffb6c1;
+      --text-color: #ffffff; /* White text for space theme */
+      --button-color: #d84343;
+      --button-hover: #e57373;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: #000;
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden; /* Hide scrollbars */
+      position: relative;
+    }
+    
+    /* Stars background effect */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at bottom, #0d1a3a 0%, #000000 100%);
+      background-size: cover;
+      opacity: 1;
+      z-index: -1;
+    }
+    
+    #scene-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+    
+    #overlay-ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none; /* Allows clicks to pass through to the canvas */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      color: var(--primary-color);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+      pointer-events: auto;
+    }
+    
+    .intro-message {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      pointer-events: auto;
+    }
+    
+    .controls {
+        position: absolute;
+        bottom: 30px;
+        display: flex;
+        gap: 20px;
+        pointer-events: auto;
+    }
+
+    .action-btn {
+        background-color: var(--button-color);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(216, 67, 67, 0.5);
+    }
+    
+    .action-btn:hover {
+        background-color: var(--button-hover);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 6px 20px rgba(216, 67, 67, 0.7);
+    }
+    
+    .action-btn:disabled {
+        background-color: #555;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Modal for the gift reveal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #1a0033; /* Dark purple */
+      color: var(--primary-color);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      position: relative;
+      max-width: 90%;
+      width: 500px;
+      animation: fadeIn 0.5s ease-out;
+      border: 2px solid var(--secondary-color);
+    }
+
+    .modal-content h2 {
+      font-family: 'Pacifico', cursive;
+      color: var(--primary-color);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 15px;
+    }
+    
+    .modal-content p {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: #ccc;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 3px solid var(--secondary-color);
+    }
+    
+    .modal-close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+        color: #ff3333;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .loading-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      color: #fff;
+      font-family: 'Pacifico', cursive;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="overlay-ui">
+    <div id="loading-message" class="loading-message">Creating the cosmos...</div>
+    <h1>Our Solar System of Love</h1>
+    <p class="intro-message">A journey through our love, one planet at a time. The first gift is the Sun! ☀️</p>
+
+    <div class="controls">
+      <button id="open-gift-btn" class="action-btn" disabled>Open Planet Gift</button>
+      <button id="next-planet-btn" class="action-btn" disabled>Fly to Next Planet</button>
+    </div>
+  </div>
+
+  <div id="scene-container"></div>
+
+  <!-- The Pop-up Modal -->
+  <div id="gift-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeModal()">×</button>
+      <h2 id="gift-title"></h2>
+      <img id="gift-image" src="" alt="Gift" />
+      <p id="gift-description"></p>
+    </div>
+  </div>
+
+  <script>
+    // Define the gifts, each corresponding to a planet
+    const gifts = [
+      { id: 0, title: "Our Eternal Love", description: "The Sun is the source of all life, just as my love for you is the source of my joy. ❤️", image: "https://placehold.co/400x400/FFD700/000?text=The+Sun" },
+      { id: 1, title: "Endless Adventures", description: "Like Mercury, our adventures are swift and full of new experiences. 🚀", image: "https://placehold.co/400x400/808080/000?text=Mercury" },
+      { id: 2, title: "A Day of Pampering", description: "Like Venus, you shine so brightly. Here is a spa day to relax and feel refreshed. 💆‍♀️", image: "https://placehold.co/400x400/D2B48C/000?text=Venus" },
+      { id: 3, title: "Our Home Planet", description: "Earth is our home, and my favorite place is right beside you. 🌍", image: "https://placehold.co/400x400/4682B4/000?text=Earth" },
+      { id: 4, title: "A Weekend Getaway", description: "Mars, the red planet of passion and new horizons. Let's go on a weekend getaway! ✈️", image: "https://placehold.co/400x400/B22222/000?text=Mars" },
+      { id: 5, title: "A Galactic Dinner", description: "Jupiter, the giant of our solar system, for a giant dinner at your favorite restaurant. 🍽️", image: "https://placehold.co/400x400/A52A2A/000?text=Jupiter" },
+      { id: 6, title: "A Ring of Promises", description: "Like Saturn's beautiful rings, our promises to each other are endless. 💍", image: "https://placehold.co/400x400/D2B48C/000?text=Saturn" },
+      { id: 7, title: "A Universe of Surprises", description: "Uranus is a world of wonder, just like the surprises I have for you. ✨", image: "https://placehold.co/400x400/ADD8E6/000?text=Uranus" },
+      { id: 8, title: "Depth of My Love", description: "Neptune, the deepest blue planet, reflects the depth of my love for you. 💙", image: "https://placehold.co/400x400/00008B/000?text=Neptune" },
+    ];
+    
+    // Global variables for Three.js
+    let scene, camera, renderer;
+    let planets = [];
+    let currentPlanetIndex = 0;
+    let rocket;
+    let exhaustParticles;
+    let shootingStars = [];
+    let starParticles;
+    let galaxy;
+    let isTraveling = false; // Flag to control camera during animation
+    
+    const clock = new THREE.Clock();
+
+    // DOM elements
+    const sceneContainer = document.getElementById('scene-container');
+    const giftModal = document.getElementById('gift-modal');
+    const giftTitle = document.getElementById('gift-title');
+    const giftImage = document.getElementById('gift-image');
+    const giftDescription = document.getElementById('gift-description');
+    const openGiftBtn = document.getElementById('open-gift-btn');
+    const nextPlanetBtn = document.getElementById('next-planet-btn');
+    const loadingMessage = document.getElementById('loading-message');
+
+    // Mouse control variables
+    let isDragging = false;
+    let previousMousePosition = {
+        x: 0,
+        y: 0
+    };
+    
+    // --- MAIN INITIALIZATION FUNCTION ---
+    window.onload = function() {
+        init();
+        animate();
+    }
+    
+    // Initialize the 3D scene
+    async function init() {
+      // Create a scene
+      scene = new THREE.Scene();
+      
+      // Create a camera
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+      camera.position.z = 100;
+      
+      // Create a renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      sceneContainer.appendChild(renderer.domElement);
+      
+      // Add lighting to the scene
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+      scene.add(ambientLight);
+      
+      const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
+      sunLight.position.set(0, 0, 0);
+      scene.add(sunLight);
+
+      // Create the celestial bodies with procedural textures
+      createSolarSystem();
+      
+      // Create the dynamic space effects
+      createStarField();
+      createDistantGalaxy();
+      createRocket();
+
+      // Hide the loading message and show UI
+      loadingMessage.style.display = 'none';
+      openGiftBtn.disabled = false;
+      nextPlanetBtn.disabled = false;
+      
+      // Set the initial camera position
+      setCameraPosition(planets[0].mesh.position);
+      
+      // Add event listeners for interaction
+      addEventListeners();
+    }
+    
+    // Simple 2D procedural noise function (like Perlin/Simplex)
+    function noise(x, y, scale = 1, seed = 0) {
+      const octaves = 4;
+      let total = 0;
+      let frequency = 1;
+      let amplitude = 1;
+      let maxValue = 0;
+      
+      for (let i = 0; i < octaves; i++) {
+        const v = (Math.sin((x + seed) * frequency / scale) + Math.sin((y + seed) * frequency / scale)) * amplitude;
+        total += v;
+        maxValue += amplitude;
+        frequency *= 2;
+        amplitude *= 0.5;
+      }
+      
+      return (total / maxValue + 1) / 2;
+    }
+
+    // Creates a procedural texture with a smoother noise pattern
+    function createProceduralTexture(baseColor, accentColor, noiseScale = 0.5, density = 0.5, seed = 0) {
+      const size = 128;
+      const data = new Uint8Array(4 * size * size);
+      const color1 = new THREE.Color(baseColor);
+      const color2 = new THREE.Color(accentColor);
+      
+      const tempColor = new THREE.Color();
+
+      for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+          const noiseValue = noise(i, j, size * noiseScale, seed);
+          
+          tempColor.copy(color1).lerp(color2, noiseValue * density);
+
+          const stride = (i * size + j) * 4;
+          data[stride] = Math.floor(tempColor.r * 255);
+          data[stride + 1] = Math.floor(tempColor.g * 255);
+          data[stride + 2] = Math.floor(tempColor.b * 255);
+          data[stride + 3] = 255;
+        }
+      }
+      
+      const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+      texture.needsUpdate = true;
+      return texture;
+    }
+    
+    // Create the celestial bodies for the solar system
+    function createSolarSystem() {
+      // Sun
+      const sunGeometry = new THREE.SphereGeometry(15, 64, 64);
+      const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffa500 });
+      const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+      sun.position.set(0, 0, 0);
+      scene.add(sun);
+      planets.push({ name: 'Sun', mesh: sun, orbitGroup: null, orbitalPeriod: 0, rotationSpeed: 0 });
+
+      // Add a glow effect to the sun
+      const sunLightSphere = new THREE.Mesh(
+          new THREE.SphereGeometry(15.5, 64, 64),
+          new THREE.MeshBasicMaterial({ color: 0xffa500, transparent: true, opacity: 0.5 })
+      );
+      scene.add(sunLightSphere);
+
+      // Planet data with procedural properties
+      const planetData = [
+        { name: 'Mercury', size: 2, distance: 30, orbitalPeriod: 0.1, rotationSpeed: 0.01, color: 0x808080, roughness: 0.8, metalness: 0.1, texture: createProceduralTexture(0x808080, 0xa9a9a9, 0.2, 0.3) },
+        { name: 'Venus', size: 3, distance: 50, orbitalPeriod: 0.25, rotationSpeed: 0.005, color: 0xd2b48c, roughness: 0.9, metalness: 0.0, emissive: 0xffa500, emissiveIntensity: 0.1, texture: createProceduralTexture(0xd2b48c, 0xf5f5dc, 0.4, 0.7)},
+        { name: 'Earth', size: 4, distance: 75, orbitalPeriod: 0.4, rotationSpeed: 0.02, color: 0x4682b4, roughness: 0.7, metalness: 0.2, texture: createProceduralTexture(0x4682b4, 0x228b22, 0.6, 0.9) },
+        { name: 'Mars', size: 3.5, distance: 100, orbitalPeriod: 0.75, rotationSpeed: 0.018, color: 0xb22222, roughness: 0.9, metalness: 0.1, texture: createProceduralTexture(0xb22222, 0xffd700, 0.3, 0.5) },
+        { name: 'Jupiter', size: 10, distance: 150, orbitalPeriod: 2, rotationSpeed: 0.05, color: 0xa52a2a, roughness: 0.6, metalness: 0.3, texture: createProceduralTexture(0xa52a2a, 0xffd700, 1.2, 0.8) },
+        { name: 'Saturn', size: 9, distance: 200, orbitalPeriod: 3, rotationSpeed: 0.04, color: 0xd2b48c, roughness: 0.8, metalness: 0.2, texture: createProceduralTexture(0xd2b48c, 0x9c661f, 0.7, 0.6) },
+        { name: 'Uranus', size: 5, distance: 250, orbitalPeriod: 5, rotationSpeed: 0.03, color: 0xadd8e6, roughness: 0.7, metalness: 0.1, texture: createProceduralTexture(0xadd8e6, 0x98fb98, 0.9, 0.4) },
+        { name: 'Neptune', size: 5, distance: 280, orbitalPeriod: 8, rotationSpeed: 0.035, color: 0x00008b, roughness: 0.8, metalness: 0.1, texture: createProceduralTexture(0x00008b, 0x4682b4, 0.5, 0.7) },
+      ];
+      
+      planetData.forEach((data, index) => {
+          const orbitGroup = new THREE.Group();
+          scene.add(orbitGroup);
+          
+          const geometry = new THREE.SphereGeometry(data.size, 64, 64);
+          const material = new THREE.MeshStandardMaterial({
+              color: data.color,
+              roughness: data.roughness,
+              metalness: data.metalness,
+              emissive: data.emissive || 0x000000,
+              emissiveIntensity: data.emissiveIntensity || 0,
+              map: data.texture
+          });
+          const planet = new THREE.Mesh(geometry, material);
+          planet.position.x = data.distance;
+          orbitGroup.add(planet);
+          
+          if (data.name === 'Saturn') {
+              const ringGeometry = new THREE.RingGeometry(data.size + 1, data.size + 3, 64);
+              const ringTexture = createProceduralTexture(0x8c7b65, 0x9c661f, 0.1, 0.9, Math.random() * 100);
+              const ringMaterial = new THREE.MeshStandardMaterial({
+                  map: ringTexture,
+                  side: THREE.DoubleSide,
+                  transparent: true,
+                  opacity: 0.6
+              });
+              const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+              ring.rotation.x = Math.PI / 2;
+              planet.add(ring);
+          }
+          
+          planets.push({
+              name: data.name,
+              mesh: planet,
+              orbitGroup: orbitGroup,
+              orbitalPeriod: data.orbitalPeriod,
+              rotationSpeed: data.rotationSpeed
+          });
+      });
+    }
+    
+    // Create a procedural star field with twinkling effect
+    function createStarField() {
+        const starGeometry = new THREE.BufferGeometry();
+        const starVertices = [];
+        const starOpacities = [];
+        
+        for (let i = 0; i < 10000; i++) {
+            const x = THREE.MathUtils.randFloatSpread(2000);
+            const y = THREE.MathUtils.randFloatSpread(2000);
+            const z = THREE.MathUtils.randFloatSpread(2000);
+            starVertices.push(x, y, z);
+            starOpacities.push(Math.random());
+        }
+        
+        starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+        starGeometry.setAttribute('opacity', new THREE.Float32BufferAttribute(starOpacities, 1));
+        
+        const starMaterial = new THREE.PointsMaterial({
+            size: 0.5,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1,
+            blending: THREE.AdditiveBlending
+        });
+        
+        starParticles = new THREE.Points(starGeometry, starMaterial);
+        scene.add(starParticles);
+    }
+
+    // Creates a spiral galaxy effect using points
+    function createDistantGalaxy() {
+      const galaxyGeometry = new THREE.BufferGeometry();
+      const galaxyVertices = [];
+      const galaxyColors = [];
+      const color = new THREE.Color();
+      const numStars = 5000;
+      const armCount = 3;
+      const armAngle = (Math.PI * 2) / armCount;
+
+      for (let i = 0; i < numStars; i++) {
+        const dist = Math.random() * 300 + 50; // Random distance from center
+        const armIndex = Math.floor(Math.random() * armCount);
+        const spiralAngle = Math.pow(dist, 1.5) * 0.05; // Spiral effect
+
+        const x = Math.cos(spiralAngle + armIndex * armAngle) * dist;
+        const y = THREE.MathUtils.randFloatSpread(20) - 10;
+        const z = Math.sin(spiralAngle + armIndex * armAngle) * dist;
+        galaxyVertices.push(x, y, z);
+
+        color.setHSL(0.6 + Math.random() * 0.1, 0.5 + Math.random() * 0.5, 0.7 + Math.random() * 0.3);
+        galaxyColors.push(color.r, color.g, color.b);
+      }
+
+      galaxyGeometry.setAttribute('position', new THREE.Float32BufferAttribute(galaxyVertices, 3));
+      galaxyGeometry.setAttribute('color', new THREE.Float32BufferAttribute(galaxyColors, 3));
+      
+      const galaxyMaterial = new THREE.PointsMaterial({
+          size: 1,
+          vertexColors: true,
+          blending: THREE.AdditiveBlending,
+          transparent: true,
+          opacity: 0.5
+      });
+      
+      galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+      galaxy.position.z = -1000;
+      galaxy.position.x = 800;
+      galaxy.position.y = 200;
+      scene.add(galaxy);
+    }
+    
+    // Create the rocket mesh with more details
+    function createRocket() {
+        // Main body
+        const bodyGeometry = new THREE.CylinderGeometry(2, 3, 15, 32);
+        const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x808080, metalness: 0.8, roughness: 0.2 });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        
+        // Nose cone
+        const noseGeometry = new THREE.ConeGeometry(3, 5, 32);
+        const noseMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.8, roughness: 0.2 });
+        const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+        nose.position.y = 10;
+        
+        // Fins
+        const finShape = new THREE.Shape();
+        finShape.moveTo(0, 0);
+        finShape.lineTo(0, 5);
+        finShape.lineTo(2, 3);
+        finShape.lineTo(0, 0);
+        const finGeometry = new THREE.ExtrudeGeometry(finShape, {
+            steps: 1,
+            depth: 0.5,
+            bevelEnabled: false
+        });
+        const finMaterial = new THREE.MeshStandardMaterial({ color: 0x555555, metalness: 0.8, roughness: 0.2 });
+        
+        const fin1 = new THREE.Mesh(finGeometry, finMaterial);
+        fin1.rotation.y = Math.PI / 2;
+        fin1.position.set(0, -6, 2.5);
+        
+        const fin2 = fin1.clone();
+        fin2.rotation.y = -Math.PI / 2;
+        fin2.position.set(0, -6, -2.5);
+        
+        const fin3 = fin1.clone();
+        fin3.rotation.z = Math.PI;
+        fin3.position.set(-2.5, -6, 0);
+        
+        const fin4 = fin1.clone();
+        fin4.rotation.z = 0;
+        fin4.position.set(2.5, -6, 0);
+
+        rocket = new THREE.Group();
+        rocket.add(body, nose, fin1, fin2, fin3, fin4);
+        rocket.rotation.x = Math.PI / 2; // Point it along the x-axis
+        rocket.scale.set(0.2, 0.2, 0.2); // Scale it down
+        rocket.visible = false;
+        scene.add(rocket);
+
+        // Exhaust particle system
+        const exhaustGeometry = new THREE.BufferGeometry();
+        const positions = [];
+        const colors = [];
+        const sizes = [];
+        const exhaustCount = 500;
+        for (let i = 0; i < exhaustCount; i++) {
+            positions.push(0, 0, 0);
+            colors.push(1, 1, 1); // Start with white/yellow
+            sizes.push(Math.random() * 3);
+        }
+        exhaustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        exhaustGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        exhaustGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+        
+        const exhaustMaterial = new THREE.PointsMaterial({
+            size: 2,
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            opacity: 0.5,
+        });
+
+        exhaustParticles = new THREE.Points(exhaustGeometry, exhaustMaterial);
+        exhaustParticles.visible = false;
+        scene.add(exhaustParticles);
+    }
+
+    // Set the camera to look at a specific object
+    function setCameraPosition(targetPosition) {
+        camera.position.x = targetPosition.x;
+        camera.position.y = targetPosition.y;
+        camera.position.z = targetPosition.z + 50;
+        camera.lookAt(targetPosition);
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const delta = clock.getDelta();
+      TWEEN.update(); // Update the Tween.js animations
+
+      // Planet orbits and axial rotations
+      planets.forEach(planet => {
+          if (planet.orbitGroup) {
+              planet.orbitGroup.rotation.y += (1 / planet.orbitalPeriod) * delta * 0.1;
+          }
+          if (planet.mesh) {
+              planet.mesh.rotation.y += planet.rotationSpeed * delta;
+          }
+      });
+      
+      // Galaxy rotation
+      if (galaxy) {
+          galaxy.rotation.y += delta * 0.005;
+      }
+      
+      // Twinkling stars effect
+      if (starParticles) {
+          const starOpacities = starParticles.geometry.attributes.opacity.array;
+          for (let i = 0; i < starOpacities.length; i++) {
+              starOpacities[i] = Math.sin(Date.now() * 0.001 + i) * 0.2 + 0.8;
+          }
+          starParticles.geometry.attributes.opacity.needsUpdate = true;
+      }
+      
+      // Shooting stars
+      if (Math.random() < 0.01 && shootingStars.length < 5) {
+          createShootingStar();
+      }
+      shootingStars.forEach(star => {
+          star.position.x += star.velocity.x;
+          star.position.y += star.velocity.y;
+          star.position.z += star.velocity.z;
+          star.material.opacity -= 0.01;
+          if (star.material.opacity <= 0) {
+              scene.remove(star);
+              shootingStars = shootingStars.filter(s => s !== star);
+          }
+      });
+      
+      // Exhaust particles
+      if (exhaustParticles.visible) {
+          const positions = exhaustParticles.geometry.attributes.position.array;
+          const colors = exhaustParticles.geometry.attributes.color.array;
+          for (let i = 0; i < positions.length; i += 3) {
+              const particleVec = new THREE.Vector3(positions[i], positions[i+1], positions[i+2]);
+              const rocketDirection = new THREE.Vector3(0, 0, -1).applyQuaternion(rocket.quaternion);
+              
+              // Move particles away from the rocket tail
+              particleVec.add(rocketDirection.clone().multiplyScalar(-0.5));
+              
+              // Apply some random motion
+              particleVec.x += (Math.random() - 0.5) * 0.2;
+              particleVec.y += (Math.random() - 0.5) * 0.2;
+              particleVec.z += (Math.random() - 0.5) * 0.2;
+              
+              // Update positions
+              positions[i] = particleVec.x;
+              positions[i+1] = particleVec.y;
+              positions[i+2] = particleVec.z;
+
+              // Fade particles out and reset
+              const sizeIndex = i / 3;
+              exhaustParticles.geometry.attributes.size.array[sizeIndex] -= 0.1;
+              if (exhaustParticles.geometry.attributes.size.array[sizeIndex] < 0) {
+                  const newPos = rocket.position.clone().add(rocketDirection.clone().multiplyScalar(-3));
+                  positions[i] = newPos.x;
+                  positions[i+1] = newPos.y;
+                  positions[i+2] = newPos.z;
+                  exhaustParticles.geometry.attributes.size.array[sizeIndex] = Math.random() * 5;
+              }
+          }
+          exhaustParticles.geometry.attributes.position.needsUpdate = true;
+          exhaustParticles.geometry.attributes.size.needsUpdate = true;
+      }
+
+      // Main camera focus logic: only look at the current planet if not traveling
+      if (!isTraveling) {
+          camera.lookAt(planets[currentPlanetIndex].mesh.position);
+      }
+
+      renderer.render(scene, camera);
+    }
+    
+    // Create a single shooting star
+    function createShootingStar() {
+        const starGeometry = new THREE.BoxGeometry(1, 1, 10);
+        const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 1 });
+        const star = new THREE.Mesh(starGeometry, starMaterial);
+        
+        star.position.x = THREE.MathUtils.randFloatSpread(200);
+        star.position.y = THREE.MathUtils.randFloatSpread(200);
+        star.position.z = THREE.MathUtils.randFloatSpread(200);
+        
+        star.velocity = new THREE.Vector3(
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5
+        );
+        
+        scene.add(star);
+        shootingStars.push(star);
+    }
+    
+    // Event listeners for UI and mouse controls
+    function addEventListeners() {
+      // Handle window resize
+      window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+      
+      // Mouse controls for camera rotation
+      sceneContainer.addEventListener('mousedown', e => {
+          if (isTraveling) return; // Ignore input during travel
+          isDragging = true;
+          previousMousePosition = { x: e.clientX, y: e.clientY };
+      });
+      
+      sceneContainer.addEventListener('mouseup', () => {
+          isDragging = false;
+      });
+      
+      sceneContainer.addEventListener('mousemove', e => {
+          if (isTraveling || !isDragging) return; // Ignore input during travel or if not dragging
+          const deltaX = e.clientX - previousMousePosition.x;
+          const deltaY = e.clientY - previousMousePosition.y;
+          camera.position.x += deltaX * 0.1;
+          camera.position.y -= deltaY * 0.1;
+          // The main animate loop will handle the lookAt, but we update the camera's position here.
+          previousMousePosition = { x: e.clientX, y: e.clientY };
+      });
+
+      // UI button events
+      openGiftBtn.addEventListener('click', () => {
+          revealGift(gifts[currentPlanetIndex]);
+      });
+      
+      nextPlanetBtn.addEventListener('click', () => {
+          const nextIndex = (currentPlanetIndex + 1) % planets.length;
+          travelToPlanet(planets[currentPlanetIndex].mesh, planets[nextIndex].mesh);
+          currentPlanetIndex = nextIndex;
+      });
+    }
+    
+    // Function to handle the travel animation between planets with a rocket
+    function travelToPlanet(startPlanet, targetPlanet) {
+        isTraveling = true; // Set flag to disable manual camera control
+        openGiftBtn.disabled = true;
+        nextPlanetBtn.disabled = true;
+        
+        // Position the rocket near the start planet for takeoff
+        const startPlanetPosition = startPlanet.position.clone();
+        const targetPlanetPosition = targetPlanet.position.clone();
+        
+        // Calculate the direction of travel
+        const travelDirection = new THREE.Vector3().subVectors(targetPlanetPosition, startPlanetPosition).normalize();
+        
+        // Orient the rocket to face the target planet
+        const up = new THREE.Vector3(0, 1, 0);
+        const axis = new THREE.Vector3().crossVectors(up, travelDirection).normalize();
+        const angle = Math.acos(up.dot(travelDirection));
+        rocket.setRotationFromAxisAngle(axis, angle + Math.PI/2);
+        
+        // Initial rocket position
+        rocket.position.copy(startPlanetPosition).add(travelDirection.clone().multiplyScalar(5));
+        rocket.visible = true;
+        
+        // Rocket exhaust is visible during travel
+        exhaustParticles.visible = true;
+
+        // Takeoff sequence
+        const takeoffTime = 1000;
+        const takeoffDistance = 20;
+        new TWEEN.Tween(rocket.position)
+            .to(startPlanetPosition.clone().add(travelDirection.clone().multiplyScalar(takeoffDistance)), takeoffTime)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(() => {
+                camera.position.copy(rocket.position).add(travelDirection.clone().multiplyScalar(-10));
+                camera.lookAt(rocket.position);
+            })
+            .onComplete(() => {
+                // Main travel sequence
+                const travelTime = 2500;
+                new TWEEN.Tween(rocket.position)
+                    .to(targetPlanetPosition.clone().add(travelDirection.clone().multiplyScalar(-20)), travelTime)
+                    .easing(TWEEN.Easing.Linear.None)
+                    .onUpdate(() => {
+                        // Dynamic camera following the rocket
+                        const cameraTarget = rocket.position.clone().add(rocket.up.clone().multiplyScalar(5));
+                        camera.position.copy(rocket.position).add(travelDirection.clone().multiplyScalar(-15));
+                        camera.lookAt(cameraTarget);
+                        // Add a slight "shaky cam" effect
+                        camera.position.x += (Math.random() - 0.5) * 0.1;
+                        camera.position.y += (Math.random() - 0.5) * 0.1;
+                    })
+                    .onComplete(() => {
+                        // Landing sequence
+                        const landingTime = 1000;
+                        new TWEEN.Tween(rocket.position)
+                            .to(targetPlanetPosition, landingTime)
+                            .easing(TWEEN.Easing.Quadratic.In)
+                            .onUpdate(() => {
+                                camera.position.copy(rocket.position).add(travelDirection.clone().multiplyScalar(-10));
+                                camera.lookAt(rocket.position);
+                            })
+                            .onComplete(() => {
+                                isTraveling = false; // Re-enable manual camera control
+                                openGiftBtn.disabled = false;
+                                nextPlanetBtn.disabled = false;
+                                rocket.visible = false;
+                                exhaustParticles.visible = false;
+                                // The main animation loop will now handle the camera.lookAt correctly
+                                setCameraPosition(targetPlanetPosition);
+                            })
+                            .start();
+                    })
+                    .start();
+            })
+            .start();
+    }
+    
+    // Reveal gift in modal
+    function revealGift(gift) {
+      if (!gift) return;
+      giftTitle.textContent = gift.title;
+      giftImage.src = gift.image;
+      giftImage.onerror = () => {
+          // Fallback to a placeholder if the placeholder URL itself fails (highly unlikely)
+          giftImage.src = 'https://placehold.co/400x400/808080/000?text=Gift+Image';
+      };
+      giftDescription.textContent = gift.description;
+      giftModal.style.display = 'flex';
+    }
+
+    // Close the modal
+    function closeModal() {
+      giftModal.style.display = 'none';
+    }
+
+  </script>
+</body>
+</html>

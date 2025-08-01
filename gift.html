@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>24 Birthday Gifts for My Love</title>
+
+  <!-- Google Fonts for a romantic feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Open+Sans&display=swap" rel="stylesheet" />
+  <!-- Confetti library for a celebration effect -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #d84343; /* A softer, romantic red */
+      --secondary-color: #ffb6c1; /* Light pink for the gift boxes */
+      --text-color: #555;
+      --light-bg-color: #fce4ec; /* Very light pink background */
+      --modal-bg-color: #ffebee;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, var(--light-bg-color) 0%, #fff 100%);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 50px;
+      position: relative;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      color: var(--primary-color);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .intro-message {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .gifts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
+
+    .gift-box {
+      position: relative;
+      background-color: var(--secondary-color);
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .gift-box:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .gift-box::before {
+      content: '🎁';
+      font-size: clamp(3rem, 10vw, 6rem);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .gift-box span.gift-number {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        font-family: 'Pacifico', cursive;
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        opacity: 0.8;
+    }
+
+    /* Styling for opened gift boxes */
+    .gift-box.opened {
+      cursor: default;
+      background-color: #e0e0e0;
+      box-shadow: none;
+      transform: none;
+    }
+    
+    .gift-box.opened::before {
+        content: '✓';
+        font-family: 'Open Sans', sans-serif;
+        font-size: clamp(3rem, 10vw, 6rem);
+        opacity: 0.6;
+        color: #66bb6a;
+    }
+    
+    .gift-box.opened:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Modal for the gift reveal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: var(--modal-bg-color);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      position: relative;
+      max-width: 90%;
+      width: 500px;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .modal-content h2 {
+      font-family: 'Pacifico', cursive;
+      color: var(--primary-color);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 15px;
+    }
+    
+    .modal-content p {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: #666;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 3px solid var(--secondary-color);
+    }
+    
+    .modal-close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+        color: #ff3333;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Animation for floating hearts */
+    @keyframes float-up {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+        50% { opacity: 0.8; }
+        100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .floating-heart {
+        position: fixed;
+        bottom: -50px;
+        font-size: clamp(1rem, 2vw, 2rem);
+        opacity: 0;
+        animation: float-up 10s linear infinite;
+        pointer-events: none;
+        color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Happy 24th Birthday, My Love!</h1>
+    <p class="intro-message">A gift for every year of your wonderful life. Open them all to celebrate you!</p>
+    <div class="gifts-grid">
+      <!-- 24 gift boxes will be generated here by JavaScript -->
+    </div>
+  </div>
+
+  <!-- The Pop-up Modal -->
+  <div id="gift-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeModal()">×</button>
+      <h2 id="gift-title"></h2>
+      <img id="gift-image" src="" alt="Gift" />
+      <p id="gift-description"></p>
+    </div>
+  </div>
+
+  <script>
+    // --- STEP 1: DEFINE YOUR GIFTS ---
+    // Update the title, description, and image URL for each of the 24 gifts.
+    // Replace the placeholders with your actual gifts and their details!
+    const gifts = [
+      { id: 1, title: "A Day of Pampering", description: "A spa day for just you, my love, to relax and feel refreshed. 💆‍♀️", image: "https://source.unsplash.com/400x400/?spa,massage" },
+      { id: 2, title: "A Romantic Dinner", description: "Dinner at your favorite restaurant, just the two of us. 🍽️", image: "https://source.unsplash.com/400x400/?romantic-dinner" },
+      { id: 3, title: "Your Favorite Book", description: "The book you've been wanting to read, signed with love. 📖", image: "https://source.unsplash.com/400x400/?books,reading" },
+      { id: 4, title: "New Earrings", description: "A beautiful pair of earrings to make you sparkle even more. ✨", image: "https://source.unsplash.com/400x400/?earrings,jewelry" },
+      { id: 5, title: "A Weekend Getaway", description: "A surprise trip to a cozy destination for a weekend of adventure. ✈️", image: "https://source.unsplash.com/400x400/?vacation,travel" },
+      { id: 6, title: "Concert Tickets", description: "Tickets to see your favorite artist live! 🎶", image: "https://source.unsplash.com/400x400/?concert,music" },
+      { id: 7, title: "A Home-Cooked Meal", description: "I'll be your personal chef for the night, cooking everything you love. 👩‍🍳", image: "https://source.unsplash.com/400x400/?home-cooking" },
+      { id: 8, title: "A Framed Photo", description: "A cherished memory of us, framed for your desk. 🖼️", image: "https://source.unsplash.com/400x400/?framed-photo" },
+      { id: 9, title: "A Gift Card", description: "A gift card to your favorite clothing store. 🛍️", image: "https://source.unsplash.com/400x400/?shopping" },
+      { id: 10, title: "Movie Marathon Night", description: "All your favorite movies, popcorn, and snuggles. 🍿", image: "https://source.unsplash.com/400x400/?movie-night" },
+      { id: 11, title: "A Custom Playlist", description: "A playlist filled with all the songs that remind me of you. 🎵", image: "https://source.unsplash.com/400x400/?music-playlist" },
+      { id: 12, title: "A Starry Night Drive", description: "A late-night drive to watch the stars together. 🌌", image: "https://source.unsplash.com/400x400/?starry-sky" },
+      { id: 13, title: "A Hand-Written Letter", description: "A letter from the heart, filled with all the reasons I love you. ✍️", image: "https://source.unsplash.com/400x400/?love-letter" },
+      { id: 14, title: "A Baking Day", description: "We'll spend the day baking your favorite treats together! 🍪", image: "https://source.unsplash.com/400x400/?baking" },
+      { id: 15, title: "Yoga Classes", description: "A series of yoga classes to help you find your inner peace. 🧘‍♀️", image: "https://source.unsplash.com/400x400/?yoga" },
+      { id: 16, title: "A New Handbag", description: "A stylish new handbag for all your adventures. 👜", image: "https://source.unsplash.com/400x400/?handbag" },
+      { id: 17, title: "An Adventure Date", description: "We'll go rock climbing, kayaking, or hiking—your choice! 🧗‍♀️", image: "https://source.unsplash.com/400x400/?adventure,hiking" },
+      { id: 18, title: "A Polaroid Camera", description: "A camera to capture all our beautiful memories instantly. 📸", image: "https://source.unsplash.com/400x400/?polaroid-camera" },
+      { id: 19, title: "A Subscription Box", description: "A monthly subscription box of things you love. 🎁", image: "https://source.unsplash.com/400x400/?subscription-box" },
+      { id: 20, title: "A Donation in Your Name", description: "A donation to your favorite charity. ❤️", image: "https://source.unsplash.com/400x400/?charity" },
+      { id: 21, title: "A Fancy Perfume", description: "A new fragrance to add to your collection. 👃", image: "https://source.unsplash.com/400x400/?perfume" },
+      { id: 22, title: "A Surprise Party", description: "A small celebration with your closest friends and family. 🎉", image: "https://source.unsplash.com/400x400/?birthday-party" },
+      { id: 23, title: "A Plant for Our Home", description: "A beautiful new plant to grow with us. 🌱", image: "https://source.unsplash.com/400x400/?houseplant" },
+      { id: 24, title: "Forever Love", description: "My love for you, which will be with you always. It's the best gift of all. 💕", image: "https://source.unsplash.com/400x400/?love" }
+    ];
+
+    const giftsGrid = document.querySelector('.gifts-grid');
+    const modal = document.getElementById('gift-modal');
+    const giftTitle = document.getElementById('gift-title');
+    const giftImage = document.getElementById('gift-image');
+    const giftDescription = document.getElementById('gift-description');
+
+    // --- STEP 2: GENERATE THE GIFT BOXES ---
+    // This loop creates the 24 gift boxes on the page dynamically.
+    gifts.forEach(gift => {
+      const giftBox = document.createElement('div');
+      giftBox.className = 'gift-box';
+      giftBox.dataset.giftId = gift.id;
+      
+      const giftNumber = document.createElement('span');
+      giftNumber.className = 'gift-number';
+      giftNumber.textContent = gift.id;
+
+      giftBox.appendChild(giftNumber);
+      
+      giftBox.addEventListener('click', () => revealGift(giftBox, gift));
+      giftsGrid.appendChild(giftBox);
+    });
+
+    // --- STEP 3: REVEAL THE GIFT ---
+    // This function handles the pop-up logic and triggers the confetti.
+    function revealGift(box, gift) {
+      if (box.classList.contains('opened')) {
+        return; // Do nothing if the box has already been opened
+      }
+
+      // Trigger confetti!
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Mark the box as opened and prevent further clicks on it
+      box.classList.add('opened');
+      
+      // Update the modal content with the gift details
+      giftTitle.textContent = gift.title;
+      giftImage.src = gift.image;
+      giftImage.onerror = () => {
+          giftImage.src = 'https://placehold.co/400x400/FFC0CB/555?text=Gift';
+      };
+      giftDescription.textContent = gift.description;
+
+      // Show the modal
+      modal.style.display = 'flex';
+    }
+
+    // --- STEP 4: CLOSE THE POP-UP ---
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+
+    // --- STEP 5: ADD FLOATING HEARTS ANIMATION ---
+    // This function creates a single heart that floats up the screen.
+    function createFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerText = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 1 + 1.2) + 'rem'; // Slightly larger hearts
+      heart.style.animationDuration = (Math.random() * 5 + 8) + 's'; // 8 to 13s, slower float
+      heart.style.animationDelay = (Math.random() * 3) + 's'; // Random delay
+      document.body.appendChild(heart);
+
+      // Remove the heart after it has floated away to prevent memory leaks
+      setTimeout(() => heart.remove(), 15000);
+    }
+    
+    // Generate new hearts continuously
+    setInterval(() => {
+        // Create a few hearts at a time for a more gentle effect
+        for (let i = 0; i < 3; i++) {
+          createFloatingHeart();
+        }
+    }, 1500); // Create 3 hearts every 1.5 seconds
+  </script>
+</body>
+</html>
