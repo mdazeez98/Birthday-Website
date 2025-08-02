@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Birthday Story for Saathu Kutti</title>
+    <!-- Google Fonts for 'Playfair Display' and 'Satisfy' -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Satisfy&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for the book effect and background */
+        body {
+            font-family: 'Playfair Display', serif;
+            background-image: url('https://images.unsplash.com/photo-1570125492419-756598501e74?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            perspective: 1500px;
+            overflow: hidden;
+        }
+
+        .book-wrapper {
+            width: 90vw;
+            height: 70vh;
+            max-width: 800px;
+            max-height: 560px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform-origin: left center;
+            transition: transform 1.2s ease-in-out;
+            transform-style: preserve-3d;
+        }
+        
+        .page.flipped {
+            transform: rotateY(-180deg);
+            pointer-events: none;
+        }
+
+        .page-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        /* Cover Styling - Deep Brown and Cream */
+        #cover-page .page-front {
+            background-color: #6b4f3a;
+            color: #f3eade;
+            box-shadow: inset -5px 0 15px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #c0a080;
+            cursor: pointer;
+            position: relative; /* Make it a positioning context for the button */
+        }
+        #cover-page .page-back {
+            background-color: #fdfaf2; /* Back of the cover */
+            transform: rotateY(180deg);
+        }
+
+        /* Page 1, 2, 3, 4 Styling - Soft Cream */
+        #page-1 .page-front, #page-2 .page-front, #page-3 .page-front, #page-4 {
+            background-color: rgba(255, 253, 247, 0.98);
+            color: #4a3f35;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative; /* Needed for absolute positioned emojis */
+        }
+        #page-1 .page-back, #page-2 .page-back, #page-3 .page-back {
+            background-color: #fdfaf2;
+            transform: rotateY(180deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        #cover-page { z-index: 5; }
+        #page-1 { z-index: 4; }
+        #page-2 { z-index: 3; }
+        #page-3 { z-index: 2; }
+        #page-4 { z-index: 1; }
+        
+        /* Spiral Binding Styling */
+        .spiral-binding {
+            position: absolute;
+            top: 0;
+            left: -10px;
+            width: 20px;
+            height: 100%;
+            background-image: repeating-linear-gradient(180deg, #d4af37, #d4af37 10px, #e4d8ac 10px, #e4d8ac 20px, #d4af37 20px, #d4af37 30px);
+            background-size: 100% 30px;
+            z-index: 10;
+            transform: rotateY(0deg);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            box-shadow: -5px 0 10px rgba(0,0,0,0.2);
+        }
+        
+        .title-font {
+            font-family: 'Satisfy', cursive;
+        }
+        
+        .cover-title {
+            color: #e0c0a0;
+            border: 2px solid #e0c0a0;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        
+        /* Buttons are now styled as flex items within a container */
+        .page-prompt {
+            font-style: italic;
+            color: #8c6b52;
+            opacity: 0;
+            transition: opacity 0.5s;
+            cursor: pointer;
+            z-index: 30; /* Ensure buttons are above all other content */
+        }
+
+        /* Emojis */
+        .emoji-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 0;
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            transform: translateY(0);
+            animation: floatUp 5s infinite ease-out;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Static Stickers */
+        .sticker-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 1; /* Above the flying emojis */
+        }
+        .sticker {
+            position: absolute;
+            font-size: 3rem; /* Larger than flying emojis */
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+            transform: rotate(-10deg); /* Slight tilt for a sticker effect */
+        }
+        .sticker.rotate-right {
+            transform: rotate(10deg);
+        }
+        
+        .typing-cursor {
+            border-right: .15em solid #8c6b52;
+            animation: blink-caret .75s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #8c6b52; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="book-wrapper">
+        <div class="book">
+            <!-- Spiral Binding -->
+            <div class="spiral-binding"></div>
+
+            <!-- Page 4 (Base Layer) -->
+            <div class="page-face" id="page-4">
+                <div class="emoji-container final-emojis">
+                    <span class="emoji" style="top: 10%; left: 20%; animation-delay: 0s;">🎈</span>
+                    <span class="emoji" style="top: 30%; left: 50%; animation-delay: 1s;">❤️</span>
+                    <span class="emoji" style="top: 60%; left: 80%; animation-delay: 2s;">🎉</span>
+                    <span class="emoji" style="top: 80%; left: 10%; animation-delay: 3s;">🎈</span>
+                    <span class="emoji" style="top: 20%; left: 70%; animation-delay: 4s;">❤️</span>
+                    <span class="emoji" style="top: 50%; left: 15%; animation-delay: 5s;">🎂</span>
+                    <span class="emoji" style="top: 70%; left: 40%; animation-delay: 6s;">🎁</span>
+                </div>
+                <div class="sticker-container final-stickers">
+                    <span class="sticker" style="top: 20%; left: 10%;">🎂</span>
+                    <span class="sticker rotate-right" style="top: 75%; left: 85%;">🎁</span>
+                    <span class="sticker" style="top: 55%; left: 30%;">❤️</span>
+                </div>
+                <div class="p-8 md:p-16 w-full text-center relative z-20">
+                     <h1 id="message-4" class="title-font text-5xl md:text-7xl text-center text-[#8c6b52]"></h1>
+                </div>
+                <div class="absolute bottom-4 left-0 right-0 flex justify-center px-4 sm:px-8">
+                     <div id="turn-back-prompt-4" class="page-prompt">Click to go back...</div>
+                </div>
+            </div>
+
+            <!-- Page 3 (Flippable) -->
+            <div class="page" id="page-3">
+                <div class="page-face page-front">
+                    <div class="emoji-container page3-emojis">
+                        <span class="emoji" style="top: 10%; left: 30%; animation-delay: 0.5s;">❤️</span>
+                        <span class="emoji" style="top: 40%; left: 70%; animation-delay: 1.5s;">🤔</span>
+                        <span class="emoji" style="top: 70%; left: 20%; animation-delay: 2.5s;">❤️</span>
+                        <span class="emoji" style="top: 25%; left: 55%; animation-delay: 3.5s;">∞</span>
+                    </div>
+                    <div class="sticker-container page3-stickers">
+                        <span class="sticker" style="top: 15%; right: 15%;">∞</span>
+                        <span class="sticker rotate-right" style="bottom: 25%; left: 25%;">❤️</span>
+                    </div>
+                    <div class="p-8 md:p-16 w-full text-center relative z-20">
+                        <p id="message-3" class="text-lg md:text-xl leading-relaxed text-left"></p>
+                    </div>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-between px-4 sm:px-8">
+                        <div id="turn-back-prompt-3" class="page-prompt">Click to go back...</div>
+                        <div id="turn-page-prompt-3" class="page-prompt">Click to turn page...</div>
+                    </div>
+                </div>
+                <div class="page-face page-back"></div>
+            </div>
+            
+            <!-- Page 2 (Flippable) -->
+            <div class="page" id="page-2">
+                <div class="page-face page-front">
+                    <div class="emoji-container page2-emojis">
+                        <span class="emoji" style="top: 20%; left: 20%; animation-delay: 0s;">❤️</span>
+                        <span class="emoji" style="top: 50%; left: 60%; animation-delay: 1s;">💑</span>
+                        <span class="emoji" style="top: 80%; left: 30%; animation-delay: 2s;">❤️</span>
+                    </div>
+                    <div class="sticker-container page2-stickers">
+                        <span class="sticker" style="top: 15%; left: 15%;">❤️</span>
+                        <span class="sticker rotate-right" style="top: 30%; right: 15%;">💑</span>
+                        <span class="sticker" style="bottom: 20%; left: 40%;">❤️</span>
+                    </div>
+                    <div class="p-8 md:p-16 w-full text-center relative z-20">
+                        <p id="message-2" class="text-lg md:text-xl leading-relaxed text-left"></p>
+                    </div>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-between px-4 sm:px-8">
+                        <div id="turn-back-prompt-2" class="page-prompt">Click to go back...</div>
+                        <div id="turn-page-prompt-2" class="page-prompt">Click to turn page...</div>
+                    </div>
+                </div>
+                <div class="page-face page-back"></div>
+            </div>
+
+            <!-- Page 1 (Flippable) -->
+            <div class="page" id="page-1">
+                <div class="page-face page-front">
+                    <div class="emoji-container page1-emojis">
+                        <span class="emoji" style="top: 15%; left: 70%; animation-delay: 0.5s;">✨</span>
+                        <span class="emoji" style="top: 45%; left: 30%; animation-delay: 1.5s;">❤️</span>
+                        <span class="emoji" style="top: 75%; left: 60%; animation-delay: 2.5s;">✨</span>
+                        <span class="emoji" style="top: 30%; left: 85%; animation-delay: 3.5s;">🎁</span>
+                    </div>
+                    <div class="sticker-container page1-stickers">
+                        <span class="sticker" style="top: 60%; left: 15%;">❤️</span>
+                        <span class="sticker rotate-right" style="bottom: 10%; right: 10%;">🎁</span>
+                    </div>
+                    <div class="p-8 md:p-16 w-full relative z-20">
+                        <h1 id="title" class="title-font text-4xl md:text-6xl text-center mb-8 text-[#8c6b52]"></h1>
+                        <p id="message-1" class="text-lg md:text-xl leading-relaxed text-left"></p>
+                    </div>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-between px-4 sm:px-8">
+                        <div id="turn-back-prompt-1" class="page-prompt">Click to go back...</div>
+                        <div id="turn-page-prompt-1" class="page-prompt">Click to turn page...</div>
+                    </div>
+                </div>
+                <div class="page-face page-back"></div>
+            </div>
+
+            <!-- Cover Page (Top Layer, Flippable) -->
+            <div class="page" id="cover-page">
+                <div class="page-face page-front">
+                    <div class="flex flex-col items-center justify-center h-full">
+                        <h2 class="title-font text-4xl md:text-5xl cover-title">A Birthday Story</h2>
+                        <p class="mt-4 text-lg">Click to open</p>
+                    </div>
+                    <a href="index.html" class="absolute bottom-4 right-4 px-4 py-2 text-sm font-bold bg-[#d4af37] text-white rounded-full shadow-lg transition-transform transform hover:scale-105 hover:bg-[#c0a080] z-10
+                             md:bottom-8 md:right-8 md:px-6 md:py-2 md:text-lg">
+                        Go to Home
+                    </a>
+                </div>
+                <div class="page-face page-back"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Configuration ---
+            const content = {
+                title: "Happy Birthday Saathu Kutti!",
+                message1: "Hope your special day is a fairytale come true, where you feel like Juliet and everything is magical. Stay enchanted and keep shining like the daylight. Cheers to another year of sparks flying and magical moments!",
+                message2: "Do you remember it all started like this? I can still remember the day I was so eagerly waiting for the moment to come so that I can send u this wish. Now we are married and it's your first birthday. I wanted to be with u so badly but my misfortune im here.",
+                message3: "Even though I'm here doesn't mean I'm not thinking about u. As u said its your day and my day as well, there are lot to come. Let it be a beginning.",
+                message4: "Happie Birthday Saathu Kutti!!"
+            };
+            const typingSpeed = 60;
+            
+            // --- Element References ---
+            const coverPage = document.getElementById('cover-page');
+            const page1 = document.getElementById('page-1');
+            const page2 = document.getElementById('page-2');
+            const page3 = document.getElementById('page-3');
+            
+            const turnPagePrompt1 = document.getElementById('turn-page-prompt-1');
+            const turnPagePrompt2 = document.getElementById('turn-page-prompt-2');
+            const turnPagePrompt3 = document.getElementById('turn-page-prompt-3');
+            
+            const turnBackPrompt1 = document.getElementById('turn-back-prompt-1');
+            const turnBackPrompt2 = document.getElementById('turn-back-prompt-2');
+            const turnBackPrompt3 = document.getElementById('turn-back-prompt-3');
+            const turnBackPrompt4 = document.getElementById('turn-back-prompt-4');
+            
+            const titleElement = document.getElementById('title');
+            const message1Element = document.getElementById('message-1');
+            const message2Element = document.getElementById('message-2');
+            const message3Element = document.getElementById('message-3');
+            const message4Element = document.getElementById('message-4');
+
+            const page1Emojis = document.querySelector('.page1-emojis');
+            const page2Emojis = document.querySelector('.page2-emojis');
+            const page3Emojis = document.querySelector('.page3-emojis');
+            const finalEmojis = document.querySelector('.final-emojis');
+
+            const page1Stickers = document.querySelector('.page1-stickers');
+            const page2Stickers = document.querySelector('.page2-stickers');
+            const page3Stickers = document.querySelector('.page3-stickers');
+            const finalStickers = document.querySelector('.final-stickers');
+
+            let bookState = 'closed'; // 'closed', 'page1-open', 'page2-open', 'page3-open', 'final'
+
+            // --- Typing Animation Function ---
+            function typeWriter(element, text, speed, callback) {
+                let i = 0;
+                element.textContent = ''; // Clear the element's content
+                const cursor = document.createElement('span');
+                cursor.className = 'typing-cursor';
+                
+                function type() {
+                    if (i < text.length) {
+                        element.textContent = text.substring(0, i + 1);
+                        element.appendChild(cursor); // Re-add the cursor after each text update
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                        // When typing is finished, set the final text without the cursor
+                        element.textContent = text;
+                        if (callback) callback();
+                    }
+                }
+                
+                type();
+            }
+
+            // --- Event Listeners ---
+            coverPage.addEventListener('click', () => {
+                if (bookState !== 'closed') return;
+                bookState = 'page1-open';
+
+                coverPage.classList.add('flipped');
+                
+                setTimeout(() => {
+                    // Start typing the title and message on page 1
+                    typeWriter(titleElement, content.title, typingSpeed + 20, () => {
+                        typeWriter(message1Element, content.message1, typingSpeed, () => {
+                            // Typing on page 1 is done, show prompts and emojis
+                            turnPagePrompt1.style.opacity = '1';
+                            turnBackPrompt1.style.opacity = '1';
+                            page1Emojis.style.opacity = '1';
+                            page1Stickers.style.opacity = '1';
+                        });
+                    });
+                }, 600);
+            });
+
+            // Turn from Page 1 to Page 2
+            turnPagePrompt1.addEventListener('click', () => {
+                if (bookState !== 'page1-open') return;
+                bookState = 'page2-open';
+
+                page1.classList.add('flipped');
+                turnPagePrompt1.style.opacity = '0';
+                turnBackPrompt1.style.opacity = '0';
+                page1Emojis.style.opacity = '0';
+                page1Stickers.style.opacity = '0';
+
+                setTimeout(() => {
+                    typeWriter(message2Element, content.message2, typingSpeed, () => {
+                        // Typing on page 2 is done, show prompts and emojis
+                        turnPagePrompt2.style.opacity = '1';
+                        turnBackPrompt2.style.opacity = '1';
+                        page2Emojis.style.opacity = '1';
+                        page2Stickers.style.opacity = '1';
+                    });
+                }, 600);
+            });
+            
+            // Turn from Page 2 to Page 3
+            turnPagePrompt2.addEventListener('click', () => {
+                if (bookState !== 'page2-open') return;
+                bookState = 'page3-open';
+
+                page2.classList.add('flipped');
+                turnPagePrompt2.style.opacity = '0';
+                turnBackPrompt2.style.opacity = '0';
+                page2Emojis.style.opacity = '0';
+                page2Stickers.style.opacity = '0';
+
+                setTimeout(() => {
+                    typeWriter(message3Element, content.message3, typingSpeed, () => {
+                        // Typing on page 3 is done, show prompts and emojis
+                        turnPagePrompt3.style.opacity = '1';
+                        turnBackPrompt3.style.opacity = '1';
+                        page3Emojis.style.opacity = '1';
+                        page3Stickers.style.opacity = '1';
+                    });
+                }, 600);
+            });
+
+            // Turn from Page 3 to Page 4 (Final Page)
+            turnPagePrompt3.addEventListener('click', () => {
+                if (bookState !== 'page3-open') return;
+                bookState = 'final';
+
+                page3.classList.add('flipped');
+                turnPagePrompt3.style.opacity = '0';
+                turnBackPrompt3.style.opacity = '0';
+                page3Emojis.style.opacity = '0';
+                page3Stickers.style.opacity = '0';
+                
+                setTimeout(() => {
+                     // Start typing the final message and show back button/emojis
+                    typeWriter(message4Element, content.message4, typingSpeed + 50, () => {
+                        turnBackPrompt4.style.opacity = '1';
+                        finalEmojis.style.opacity = '1';
+                        finalStickers.style.opacity = '1';
+                    });
+                }, 600);
+            });
+
+            // Go back from Page 4 to Page 3
+            turnBackPrompt4.addEventListener('click', () => {
+                if (bookState !== 'final') return;
+                bookState = 'page3-open';
+                
+                page3.classList.remove('flipped');
+                turnBackPrompt4.style.opacity = '0';
+                finalEmojis.style.opacity = '0';
+                finalStickers.style.opacity = '0';
+                
+                setTimeout(() => {
+                    turnPagePrompt3.style.opacity = '1';
+                    turnBackPrompt3.style.opacity = '1';
+                    page3Emojis.style.opacity = '1';
+                    page3Stickers.style.opacity = '1';
+                }, 600);
+            });
+
+            // Go back from Page 3 to Page 2
+            turnBackPrompt3.addEventListener('click', () => {
+                if (bookState !== 'page3-open') return;
+                bookState = 'page2-open';
+                
+                page2.classList.remove('flipped');
+                turnPagePrompt3.style.opacity = '0';
+                turnBackPrompt3.style.opacity = '0';
+                page3Emojis.style.opacity = '0';
+                page3Stickers.style.opacity = '0';
+                
+                setTimeout(() => {
+                    turnPagePrompt2.style.opacity = '1';
+                    turnBackPrompt2.style.opacity = '1';
+                    page2Emojis.style.opacity = '1';
+                    page2Stickers.style.opacity = '1';
+                }, 600);
+            });
+            
+            // Go back from Page 2 to Page 1
+            turnBackPrompt2.addEventListener('click', () => {
+                if (bookState !== 'page2-open') return;
+                bookState = 'page1-open';
+
+                page1.classList.remove('flipped');
+                turnPagePrompt2.style.opacity = '0';
+                turnBackPrompt2.style.opacity = '0';
+                page2Emojis.style.opacity = '0';
+                page2Stickers.style.opacity = '0';
+                
+                setTimeout(() => {
+                    turnPagePrompt1.style.opacity = '1';
+                    turnBackPrompt1.style.opacity = '1';
+                    page1Emojis.style.opacity = '1';
+                    page1Stickers.style.opacity = '1';
+                }, 600);
+            });
+            
+            // Go back from Page 1 to Cover
+            turnBackPrompt1.addEventListener('click', () => {
+                if (bookState !== 'page1-open') return;
+                bookState = 'closed';
+
+                coverPage.classList.remove('flipped');
+                turnPagePrompt1.style.opacity = '0';
+                turnBackPrompt1.style.opacity = '0';
+                page1Emojis.style.opacity = '0';
+                page1Stickers.style.opacity = '0';
+            });
+        });
+    </script>
+
+    <script>
+  // Disable right-click
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+  });
+
+  // Disable specific key combinations
+  document.addEventListener('keydown', function (e) {
+    // F12
+    if (e.key === "F12") {
+      e.preventDefault();
+    }
+
+    // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+    if (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) {
+      e.preventDefault();
+    }
+
+    // Ctrl+U (view source)
+    if (e.ctrlKey && e.key === "u") {
+      e.preventDefault();
+    }
+  });
+</script>
+</body>
+</html>

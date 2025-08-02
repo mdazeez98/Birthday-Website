@@ -840,6 +840,60 @@
 
 
 
+ .heart-btn-container {
+    position: relative;
+    width: 120px; /* Made even smaller */
+    height: 120px; /* Made even smaller */
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    transform: rotate(-45deg);
+    box-shadow: 0 4px 15px rgba(255, 65, 108, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 100px; /* Center the button */
+  }
+
+  .heart-btn-container:hover {
+    transform: scale(1.1) rotate(-45deg);
+    box-shadow: 0 8px 20px rgba(255, 65, 108, 0.8);
+  }
+
+  .heart-btn-container::before,
+  .heart-btn-container::after {
+    content: '';
+    position: absolute;
+    width: 120px; /* Made even smaller */
+    height: 120px; /* Made even smaller */
+    background: inherit;
+    border-radius: 50%;
+  }
+
+  .heart-btn-container::before {
+    top: -60px; /* Adjusted position */
+    left: 0;
+  }
+
+  .heart-btn-container::after {
+    top: 0;
+    left: 60px; /* Adjusted position */
+  }
+  
+  .heart-btn-text {
+    position: relative;
+    z-index: 10;
+    transform: rotate(45deg);
+    text-align: center;
+    font-size: 1rem; /* Adjusted font size to fit */
+    font-family: 'Pacifico', cursive; /* Applied romantic font */
+  }
+  
+  /* Class to hide the button initially, controlled by JavaScript */
+  .hidden-button {
+      display: none !important;
+  }
+
   </style>
 
 </head>
@@ -871,6 +925,14 @@
 ">
   <h1 style="font-size: 40px; font-family: 'Pacifico', cursive;">🎂 Advance Happy Birthday Saathu Kutti 🎉</h1>
   <div id="countdown" style="font-size: 30px; margin-top: 20px; font-weight: bold;"></div>
+  <!-- Book Cover Button -->
+
+    <a href="early.html" class="heart-btn-container">
+      <div class="heart-btn-text text-white font-extrabold px-4 py-2">
+        Early Access<br/>to My Love<br/>Saathu Kutti!
+      </div>
+    </a>
+
 </div>
 
 <!-- Quiz Screen -->
